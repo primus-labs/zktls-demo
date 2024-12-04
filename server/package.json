@@ -1,0 +1,24 @@
+{
+  "name": "zktls-demo-server",
+  "version": "1.0.0",
+  "description": "Primus zkTLS demo of server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/primus-labs/zktls-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/primus-labs/zktls-demo/issues"
+  },
+  "homepage": "https://github.com/primus-labs/zktls-demo#readme",
+  "dependencies": {
+    "@fksyuan/zktls-js-sdk": "file:../../mpctls-js-sdk",
+    "cors": "^2.8.5",
+    "express": "^4.21.1"
+  }
+}
