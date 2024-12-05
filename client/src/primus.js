@@ -18,12 +18,12 @@ export async function primusProof() {
     //set additionParams
     const additionParams = `{"userId":"22","url":"http://www.baidu.com"}`
     primusZKTLS.setAdditionParams(additionParams);
-   
     //set mode 
     const proxyMode = "proxytls"
     primusZKTLS.setAttMode({
         algorithmType: proxyMode
     });
+
     //get resopnse form backend
     const response = await fetch(`http://localhost:3000/primus/sign?signParams=${requestStr}`);
     const responseJson = await response.json();
@@ -37,10 +37,10 @@ export async function primusProof() {
     console.log("verifyResult=", verifyResult);
 
     if (verifyResult === true){
-        //attestation business logic check
-        // timestamp is egal 
-        // verifer user name or follower number is over x num etc
-        //do your own business logic
+        // attestation business logic check for example:
+        // 1.timestamp is legal 
+        // 2.verifer user name or follower number is over x num etc..
+        // then do your own business logic
     }else{
         //not the primus sign
     }
