@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import { primusProof } from './primus'
+//import { primusProof } from './testprimus'
 
 function App() {
   const [count, setCount] = useState(0)

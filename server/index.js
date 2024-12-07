@@ -3,7 +3,7 @@ const cors = require('cors');
 const { PrimusZKTLS } = require('@fksyuan/zktls-js-sdk');
 
 const app = express();
-const port = 3000;
+const port = 9000;
 
 // Just for test, developers can modify it
 app.use(cors()); 
