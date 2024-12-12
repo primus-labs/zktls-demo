@@ -1,4 +1,4 @@
-import { PrimusZKTLS } from "@fksyuan/zktls-js-sdk"
+import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
 
 //Initialization parameters
 const primusZKTLS = new PrimusZKTLS();

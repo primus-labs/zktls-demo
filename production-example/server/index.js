@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { PrimusZKTLS } = require('@fksyuan/zktls-js-sdk');
+const { PrimusZKTLS } = require('@primuslabs/zktls-js-sdk');
 
 const app = express();
 const port = 9000;
