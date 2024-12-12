@@ -2,13 +2,13 @@ import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
 
 //Initialization parameters
 const primusZKTLS = new PrimusZKTLS();
-const appId = "0x9d2b9084782bb148ac07684ac57d443bf8972b69";
+const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
 const initAttestaionResult = await primusZKTLS.init(appId);
 console.log("primusProof initAttestaionResult=", initAttestaionResult);
 
 export async function primusProof() {
     //Set TemplateID and user address
-    const attTemplateID = "8898dfb9-68a3-464c-890b-d75e1b26791a";
+    const attTemplateID = "044feebb-19e7-4152-a0a6-404b81f65ee4";
     const userAddress = "0x7ab44DE0156925fe0c24482a2cDe48C465e47573";
     //Generate attestation request
     const request = primusZKTLS.generateRequestParams(attTemplateID, userAddress);
