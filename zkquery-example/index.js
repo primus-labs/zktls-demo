@@ -1,26 +1,26 @@
 const { PrimusCoreTLS } = require("@primuslabs/zktls-core-sdk");
 
 async function primusProofTest() {
-    // Initialize parameters.
+    // Initialize parameters, the init function is recommended to be called when the program is initialized.
     const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
     const appSecret= "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
     const zkTLS = new PrimusCoreTLS();
-    // 
     const initResult = await zkTLS.init(appId, appSecret);
     console.log("primusProof initResult=", initResult);
 
-    // Set request and responseResolves
+    // Set request and responseResolves.
     const request ={
-        url: "https://www.okx.com/api/v5/public/instruments?instType=SPOT&instId=BTC-USD",
-        method: "GET",
-        header: {},
-        body: ""
+        url: "https://www.okx.com/api/v5/public/instruments?instType=SPOT&instId=BTC-USD", // Request endpoint.
+        method: "GET", // Request method.
+        header: {}, // Request headers.
+        body: "" // Request body.
     };
+    // The responseResolves is the response structure of the url.
+    // For example the response of the url is: {"data":[{ ..."instFamily": "","instType":"SPOT",...}]}.
     const responseResolves = [
         {
-            keyName: 'instType',
-            parsePath: '$.data[0].instType',
-            parseType: 'string'
+            keyName: 'instType', // According to the response keyname, such as: instType.
+            parsePath: '$.data[0].instType', // According to the response parsePath, such as: $.data[0].instType.
         }
     ];
     // Generate attestation request.
