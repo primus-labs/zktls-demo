@@ -1,0 +1,22 @@
+{
+  "name": "zkquery-example",
+  "version": "1.0.0",
+  "description": "Primus zkQuery example",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/primus-labs/zktls-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/primus-labs/zktls-demo/issues"
+  },
+  "homepage": "https://github.com/primus-labs/zktls-demo#readme",
+  "dependencies": {
+    "@primuslabs/zktls-core-sdk": "^0.1.0"
+  }
+}
