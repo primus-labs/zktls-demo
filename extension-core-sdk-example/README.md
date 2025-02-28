@@ -1,5 +1,3 @@
-<img src="src/assets/img/logo.png" width="64"/>
-
 # Primus Browser Extension SDK Demo
 
 ## Features
