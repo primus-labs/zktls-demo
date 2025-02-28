@@ -64,3 +64,12 @@ async function primusProofTest() {
 }
 
 primusProofTest();
+
+chrome.action.onClicked.addListener((tab) => {
+  showIndex();
+});
+
+const showIndex = (info, tab) => {
+  let url = chrome.runtime.getURL('newtab.html');
+  chrome.tabs.create({ url });
+};
