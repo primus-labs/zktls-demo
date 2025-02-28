@@ -20,6 +20,10 @@ async function primusProofTest() {
     const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
     const appSecret= "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
     const initResult = await zkTLS.init(appId, appSecret);
+
+    // For Production Example, init only need appId.
+    //const initResult = await zkTLS.init(appId);
+
     console.log("primusProof initResult=", initResult);
 }
 
@@ -65,6 +69,11 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
         // Sign request.
         const signedRequestStr = await zkTLS.sign(generateRequestStr);
+
+        // For Production Example: Get signed resopnse from backend.
+        // const response = await fetch(`http://localhost:9000/primus/sign?signParams=${encodeURIComponent(generateRequestStr)}`);
+        // const responseJson = await response.json();
+        // const signedRequestStr = responseJson.signResult;
 
         // Start attestation process.
         const attestation = await zkTLS.startAttestation(signedRequestStr);
