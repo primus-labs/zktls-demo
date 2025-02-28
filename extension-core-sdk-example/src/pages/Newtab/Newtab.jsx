@@ -4,18 +4,15 @@ import './Newtab.css';
 import './Newtab.scss';
 
 const Newtab = () => {
-  const onClickInit = () => {};
-  const onClickStartOffline = () => {};
-  const onClickAttest = () => {};
+  const onClickAttest = () => {
+    chrome.runtime.sendMessage({
+      type: 'PrimusExtCoreTLS',
+      method: 'startAttestation',
+    });
+  };
   return (
     <div className="App">
       <header className="App-header">
-        <button className="btn btn1" onClick={onClickInit}>
-          init
-        </button>
-        <button className="btn btn2" onClick={onClickStartOffline}>
-          startOffline
-        </button>
         <button className="btn btn3" onClick={onClickAttest}>
           attest
         </button>
