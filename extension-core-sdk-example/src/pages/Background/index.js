@@ -1,4 +1,4 @@
-const { PrimusCoreTLS } = require("@fksyuan/zktls-ext-core-sdk");
+const { PrimusExtCoreTLS } = require("@fksyuan/zktls-ext-core-sdk");
 
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
@@ -17,7 +17,7 @@ async function primusProofTest() {
     // Initialize parameters, the init function is recommended to be called when the program is initialized.
     const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
     const appSecret= "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
-    const zkTLS = new PrimusCoreTLS();
+    const zkTLS = new PrimusExtCoreTLS();
     const initResult = await zkTLS.init(appId, appSecret);
     console.log("primusProof initResult=", initResult);
 
@@ -38,14 +38,19 @@ async function primusProofTest() {
     ];
     // Generate attestation request.
     const generateRequest = zkTLS.generateRequestParams(request, responseResolves);
-
     // Set zkTLS mode, default is proxy model. (This is optional)
     generateRequest.setAttMode({
         algorithmType: "proxytls"
     });
 
+    // Transfer request object to string.
+    const generateRequestStr = generateRequest.toJsonString();
+
+    // Sign request.
+    const signedRequestStr = await zkTLS.sign(generateRequestStr);
+
     // Start attestation process.
-    const attestation = await zkTLS.startAttestation(generateRequest);
+    const attestation = await zkTLS.startAttestation(signedRequestStr);
     console.log("attestation=", attestation);
 
     const verifyResult = zkTLS.verifyAttestation(attestation);
