@@ -185,7 +185,7 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'node_modules/@fksyuan/zktls-ext-core-sdk/dist/algorithm/client_plugin.wasm',
+          from: 'node_modules/@primuslabs/zktls-ext-core-sdk/dist/algorithm/client_plugin.wasm',
           to: path.join(__dirname, 'build'),
           force: true,
         },
@@ -194,7 +194,7 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'node_modules/@fksyuan/zktls-ext-core-sdk/dist/algorithm/client_plugin.worker.js',
+          from: 'node_modules/@primuslabs/zktls-ext-core-sdk/dist/algorithm/client_plugin.worker.js',
           to: path.join(__dirname, 'build'),
           force: true,
         },
@@ -203,7 +203,7 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'node_modules/@fksyuan/zktls-ext-core-sdk/dist/algorithm/client_plugin.js',
+          from: 'node_modules/@primuslabs/zktls-ext-core-sdk/dist/algorithm/client_plugin.js',
           to: path.join(__dirname, 'build'),
           force: true,
         },
@@ -212,7 +212,7 @@ var options = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: 'node_modules/@fksyuan/zktls-ext-core-sdk/dist/algorithm/primus_zk.js',
+          from: 'node_modules/@primuslabs/zktls-ext-core-sdk/dist/algorithm/primus_zk.js',
           to: path.join(__dirname, 'build'),
           force: true,
         },

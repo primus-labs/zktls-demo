@@ -17,14 +17,18 @@
 ### Procedures:
 
 1. Check if your [Node.js](https://nodejs.org/) version is >= **18**.
-2. Clone this [repository](https://github.com/pado-labs/pado-extension.git).
-5. Run `npm install` to install the dependencies.
+2. Clone this [repository](https://github.com/primus-labs/zktls-demo.git).
+5. Run `cd extension-core-sdk-example` and`npm install` to install the dependencies.
 6. Run `npm start`
 7. Load your extension on Chrome following:
    1. Access `chrome://extensions/`
    2. Check `Developer mode`
    3. Click on `Load unpacked extension`
    4. Select the `build` folder.
+
+### Running Test
+
+Click the extension icon to open a page, then click the "attest" button on the page to start the zktls certification process.
 
 ## Structure
 
