@@ -1,4 +1,4 @@
-const { PrimusExtCoreTLS } = require("@fksyuan/zktls-ext-core-sdk");
+const { PrimusExtCoreTLS } = require("@primuslabs/zktls-ext-core-sdk");
 
 console.log('This is the background page.');
 console.log('Put the background scripts here.');
