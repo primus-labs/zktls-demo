@@ -10,19 +10,19 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: 'node_modules/@fksyuan/zktls-page-core-sdk/dist/algorithm/client_plugin.wasm',
+          src: 'node_modules/@primuslabs/zktls-page-core-sdk/dist/algorithm/client_plugin.wasm',
           dest: './'
         },
         {
-          src: 'node_modules/@fksyuan/zktls-page-core-sdk/dist/algorithm/client_plugin.worker.js',
+          src: 'node_modules/@primuslabs/zktls-page-core-sdk/dist/algorithm/client_plugin.worker.js',
           dest: './'
         },
         {
-          src: 'node_modules/@fksyuan/zktls-page-core-sdk/dist/algorithm/client_plugin.js',
+          src: 'node_modules/@primuslabs/zktls-page-core-sdk/dist/algorithm/client_plugin.js',
           dest: './'
         },
         {
-          src: 'node_modules/@fksyuan/zktls-page-core-sdk/dist/algorithm/primus_zk.js',
+          src: 'node_modules/@primuslabs/zktls-page-core-sdk/dist/algorithm/primus_zk.js',
           dest: './'
         }
       ]
