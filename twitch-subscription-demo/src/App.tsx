@@ -10,7 +10,7 @@ function App() {
   const [channelLogin, setChannelLogin] = useState("");
 
   const [doingAttestation, setIsDoingAttestation] = useState(false);
-  const [attestation, setAttestation] = useState();
+  const [attestation, setAttestation] = useState({});
   const [error, setError] = useState({});
 
   const startAttestation = async () => {
@@ -28,9 +28,9 @@ function App() {
       await primusProofTest(channelLogin, (attestation) => {
         setAttestation(attestation);
       });
-    } catch (e) {
-        // console.error(e);
-        setError(e)
+    } catch (e: any) {
+      // console.error(e);
+      setError(e);
     } finally {
       setIsDoingAttestation(false);
     }
