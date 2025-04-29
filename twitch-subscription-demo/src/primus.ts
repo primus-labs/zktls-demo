@@ -1,5 +1,5 @@
 import {PrimusZKTLS} from "@primuslabs/zktls-js-sdk";
-import {PrimusContractAbi} from "./primusContractAbi";
+import { PrimusContractAbi } from "./primusContractAbi";
 import { ethers } from "ethers";
 
 // Initialize parameters.
