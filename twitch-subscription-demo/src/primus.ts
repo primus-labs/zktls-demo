@@ -1,4 +1,6 @@
-import {PrimusZKTLS} from "@primuslabs/zktls-js-sdk"
+import {PrimusZKTLS} from "@primuslabs/zktls-js-sdk";
+import {PrimusContractAbi} from "./primusContractAbi";
+import { ethers } from "ethers";
 
 // Initialize parameters.
 const primusZKTLS = new PrimusZKTLS();
@@ -61,7 +63,20 @@ export async function primusProofTest(channelName: string,callback: (attestation
     if (verifyResult === true) {
         // Business logic checks, such as attestation content and timestamp checks
         // do your own business logic.
-        callback(attestation)
+        callback(attestation);
+
+        const contractAddress = "0xCE7cefB3B5A7eB44B59F60327A53c9Ce53B0afdE";
+        const provider = new ethers.providers.JsonRpcProvider(
+          "https://rpc.basecamp.t.raas.gelato.cloud"
+        );
+        const contract = new ethers.Contract(contractAddress, PrimusContractAbi, provider);
+        try {
+          // Call verifyAttestation func
+          await contract.verifyAttestation(attestation);
+          console.log("verify Attestation on chain true");
+        } catch (error) {
+          console.error("Error in verifyAttestation:", error);
+        }
     } else {
         // If failed, define your own logic.
     }
