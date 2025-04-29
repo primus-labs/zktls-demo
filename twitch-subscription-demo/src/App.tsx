@@ -22,13 +22,17 @@ function App() {
     if (doingAttestation) {
       return;
     }
+    setAttestation({});
+    setError({});
     console.log("start attestation!");
+
     setIsDoingAttestation(true);
     try {
       await primusProofTest(channelLogin, (attestation) => {
         setAttestation(attestation);
       });
     } catch (e: any) {
+      debugger
       // console.error(e);
       setError(e);
     } finally {
@@ -69,13 +73,22 @@ function App() {
           </div>
         </div>
       </div>
-
-      <JsonView
-        data={attestation || error}
-        style={{
-          container: "my-json-container",
-        }}
-      />
+      {Object.keys(attestation).length > 0 && (
+        <JsonView
+          data={attestation}
+          style={{
+            container: "my-json-container",
+          }}
+        />
+      )}
+      {Object.keys(error).length > 0 && (
+        <JsonView
+          data={error}
+          style={{
+            container: "my-json-container",
+          }}
+        />
+      )}
     </div>
   );
 }
