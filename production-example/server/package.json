@@ -18,7 +18,7 @@
   "homepage": "https://github.com/primus-labs/zktls-demo#readme",
   "dependencies": {
     "@primuslabs/zktls-ext-core-sdk": "^0.1.0",
-    "@primuslabs/zktls-js-sdk": "^0.2.7",
+    "@primuslabs/zktls-js-sdk": "^0.3.1",
     "cors": "^2.8.5",
     "express": "^4.21.1"
   }
