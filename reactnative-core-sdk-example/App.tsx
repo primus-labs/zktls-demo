@@ -21,7 +21,7 @@ export default function App() {
         const zkTLS = new PrimusCoreTLS();
         const initResult = await zkTLS.init(appId, appSecret);
         console.log("primusProof initResult=", initResult);
-        setInitResult(result.toString());
+        setInitResult(initResult.toString());
 
         // Set request and responseResolves.
         let request = {
@@ -34,9 +34,9 @@ export default function App() {
         // For example the response of the url is: {"data":[{ ..."instFamily": "","instType":"SPOT",...}]}.
         const responseResolves = [
           {
-              keyName: 'instType',
-              parsePath: '$.data[0].instType',
-              parseType: 'string'
+            keyName: 'instType',
+            parsePath: '$.data[0].instType',
+            parseType: 'string'
           }
         ];
 
@@ -46,7 +46,7 @@ export default function App() {
 
         // Set zkTLS mode, default is proxy model. (This is optional)
         generateRequest.setAttMode({
-            algorithmType: "proxytls"
+          algorithmType: "proxytls"
         });
 
         // Transfer request object to string.
@@ -64,10 +64,10 @@ export default function App() {
         setVerifyResult(JSON.stringify(verifyResult));
         console.log("verifyResult=", verifyResult);
         if (verifyResult === true) {
-            // Business logic checks, such as attestation content and timestamp checks
-            // do your own business logic.
+          // Business logic checks, such as attestation content and timestamp checks
+          // do your own business logic.
         } else {
-            // If failed, define your own logic.
+          // If failed, define your own logic.
         }
       } catch (e) {
         console.error(e);
