@@ -12,7 +12,11 @@ function App() {
     const [doingAttestation, setIsDoingAttestation] = useState(false);
     const [templateStates, setTemplateStates] = useState([]);
     const templates = [
-
+        {
+            templateId: "369e1db8-47c9-4dc6-85b5-037cd02d3383",
+            name: "30-day Spot Account PnL Rate",
+            source: "Binance",
+        },
         {
             templateId: "4871f96f-10e1-43e1-93f3-2f7ef4d551db",
             name: "Spot 30-Day Trade Volume",
