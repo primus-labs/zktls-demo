@@ -1,40 +1,180 @@
-import {PrimusZKTLS} from "@primuslabs/zktls-js-sdk";
+import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk";
 
 //Initialization parameters
 const primusZKTLS = new PrimusZKTLS();
 const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
-const appSecret= "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
+const appSecret = "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
 
 primusZKTLS.init(appId, appSecret).then(
-    (result) => {
-        console.log("primusProof initAttestaionResult=", result);
-    },
-    (error) => {
-        console.log(error);
-    }
+  (result) => {
+    console.log("primusProof initAttestaionResult=", result);
+  },
+  (error) => {
+    console.log(error);
+  }
 );
 
+////////////////////////////////////////
+//////////////////// Helpers Begin
+// ref: https://github.com/primus-labs/zktls-att-verification/tree/brevis/src
+import crypto from 'crypto';
+
+function incrNonce(nonceBuffer) {
+  for (let i = 3; i >= 0; i--) {
+    if (nonceBuffer[i] === 255) {
+      nonceBuffer[i] = 0;
+    } else {
+      nonceBuffer[i]++;
+      break;
+    }
+  }
+}
+
+class Aes128Encryptor {
+  constructor(keyBytes) {
+    if (keyBytes.length !== 16) {
+      throw new Error('AES-128 key must be 16 bytes.');
+    }
+    this.keyBytes = keyBytes;
+  }
+
+  static fromHex(hexKey) {
+    const keyBytes = Buffer.from(hexKey, 'hex');
+    return new Aes128Encryptor(keyBytes);
+  }
+
+  encryptBlock(inputBytes) {
+    if (inputBytes.length !== 16) {
+      throw new Error('ECB block encrypt requires 16 bytes input.');
+    }
+
+    const cipher = crypto.createCipheriv('aes-128-ecb', this.keyBytes, null);
+    cipher.setAutoPadding(false);
+
+    const encrypted = Buffer.concat([
+      cipher.update(Buffer.from(inputBytes)),
+      cipher.final()
+    ]);
+
+    return Uint8Array.from(encrypted);
+  }
+
+  computeContinuousCounters(nonceBytes, totalLength) {
+    const result = [];
+    const nonceIndex = Buffer.alloc(4, 0);
+
+    incrNonce(nonceIndex);
+
+    while (result.length < totalLength) {
+      incrNonce(nonceIndex);
+
+      const fullNonce = Buffer.concat([
+        Buffer.from(nonceBytes),
+        nonceIndex
+      ]);
+
+      const encryptedCounter = this.encryptBlock(fullNonce);
+
+      result.push(...encryptedCounter);
+    }
+
+    return Uint8Array.from(result.slice(0, totalLength));
+  }
+}
+
+function hexToBytes(hex) {
+  return new Uint8Array(hex.match(/.{1,2}/g).map(byte => parseInt(byte, 16)));
+}
+
+function bytesToUtf8(bytes) {
+  return new TextDecoder().decode(new Uint8Array(bytes));
+}
+
+class TLSRecord {
+  constructor(ciphertext, nonce, jsonBlockPositions) {
+    this.ciphertext = ciphertext;             // TLS record ciphertext (hex string)
+    this.nonce = nonce;                       // TLS record nonce (hex string)
+    this.jsonBlockPositions = jsonBlockPositions; // Array of [start, end] pairs
+  }
+}
+
+class HTTPPacket {
+  constructor(records) {
+    this.records = records; // Array of TLSRecord
+  }
+}
+
+class TLSData {
+  constructor(packets) {
+    this.packets = packets; // Array of HTTPPacket
+  }
+
+  async getFullPlainResponse(aesKeyHex) {
+    const completeResponses = [];
+    const cipher = await Aes128Encryptor.fromHex(aesKeyHex);
+
+    for (const packet of this.packets) {
+      let completeResponse = '';
+
+      for (const record of packet.records) {
+        const nonce = hexToBytes(record.nonce);
+        const ciphertext = hexToBytes(record.ciphertext);
+        const ciphertextLen = ciphertext.length;
+
+        const counters = await cipher.computeContinuousCounters(nonce, ciphertextLen);
+
+        const plaintextBytes = counters.map((counterByte, idx) => counterByte ^ ciphertext[idx]);
+        const plaintext = bytesToUtf8(plaintextBytes);
+
+        completeResponse += plaintext;
+      }
+
+      completeResponses.push(completeResponse);
+    }
+
+    return completeResponses;
+  }
+}
+//////////////////// Helpers End
+////////////////////////////////////////
+
+
 export async function primusProofTest(attTemplateID) {
-    //Set TemplateID and user address
-    // const attTemplateID = "044feebb-19e7-4152-a0a6-404b81f65ee4";
-    const userAddress = "0x7ab44DE0156925fe0c24482a2cDe48C465e47573";
-    const request = primusZKTLS.generateRequestParams(attTemplateID, userAddress);
-    request.setComputeMode("nonecomplete");
+  //Set TemplateID and user address
+  // const attTemplateID = "044feebb-19e7-4152-a0a6-404b81f65ee4";
+  const userAddress = "0x7ab44DE0156925fe0c24482a2cDe48C465e47573";
+  const request = primusZKTLS.generateRequestParams(attTemplateID, userAddress);
+  request.setComputeMode("nonecomplete");
 
-    const requestStr = request.toJsonString();
-    const signedRequestStr = await primusZKTLS.sign(requestStr);
+  const requestStr = request.toJsonString();
+  const signedRequestStr = await primusZKTLS.sign(requestStr);
 
-    const attestation = await primusZKTLS.startAttestation(signedRequestStr);
-    console.log("attestation=", attestation);
+  const attestation = await primusZKTLS.startAttestation(signedRequestStr);
+  console.log("attestation=", attestation);
 
-    let extendedData = JSON.parse(primusZKTLS.getExtendedData(request.requestid));
-    const aesKey = JSON.parse(extendedData.CompleteHttpResponseCiphertext).packets[0].aes_key;
-    console.log("aesKey=", aesKey);
+  let extendedData = JSON.parse(primusZKTLS.getExtendedData(request.requestid));
+  const aesKey = JSON.parse(extendedData.CompleteHttpResponseCiphertext).packets[0].aes_key;
+  console.log("aesKey=", aesKey);
 
-    const verifyResult = await primusZKTLS.verifyAttestation(attestation);
-    console.log("verifyResult=", verifyResult);
+  const verifyResult = await primusZKTLS.verifyAttestation(attestation);
+  console.log("verifyResult=", verifyResult);
 
-    if (verifyResult === true) {
+  if (verifyResult === true) {
+    {
+      const data = JSON.parse(extendedData.data)
+      const parsed = JSON.parse(data.CompleteHttpResponseCiphertext)
+      const tlsData = new TLSData(
+        parsed.packets.map(packet => new HTTPPacket(
+          packet.records.map(record => new TLSRecord(
+            record.ciphertext,
+            record.nonce,
+            record.json_block_positions
+          ))
+        ))
+      );
+      const fullPlainResponse = await tlsData.getFullPlainResponse(aesKey);
+      console.log("fullPlainResponse=", fullPlainResponse);
+    }
     //    const zkVmRequestData = {
     //     attestationData: {
     //         public_data: attestation,
@@ -72,9 +212,9 @@ export async function primusProofTest(attTemplateID) {
     //         console.log("query result error.");
     //     }
     //   }, 5000);
-    } else {
-        //not the primus sign, error business logic
-    }
+  } else {
+    //not the primus sign, error business logic
+  }
 }
 
 async function postJson(url, data, headers = {}) {
