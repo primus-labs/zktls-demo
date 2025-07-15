@@ -1,4 +1,7 @@
 import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk";
+import { Buffer } from 'buffer';
+import CryptoJS from 'crypto-js';
+globalThis.Buffer = Buffer;
 
 //Initialization parameters
 const primusZKTLS = new PrimusZKTLS();
@@ -47,17 +50,32 @@ class Aes128Encryptor {
     if (inputBytes.length !== 16) {
       throw new Error('ECB block encrypt requires 16 bytes input.');
     }
+    const key = CryptoJS.lib.WordArray.create(this.keyBytes);
+    const input = CryptoJS.lib.WordArray.create(inputBytes);
+    const encrypted = CryptoJS.AES.encrypt(input, key, {
+      mode: CryptoJS.mode.ECB,
+      padding: CryptoJS.pad.NoPadding,
+    });
 
-    const cipher = crypto.createCipheriv('aes-128-ecb', this.keyBytes, null);
-    cipher.setAutoPadding(false);
+    const encryptedHex = encrypted.ciphertext.toString(CryptoJS.enc.Hex);
+    return Uint8Array.from(Buffer.from(encryptedHex, 'hex'));
+}
 
-    const encrypted = Buffer.concat([
-      cipher.update(Buffer.from(inputBytes)),
-      cipher.final()
-    ]);
+  // encryptBlock(inputBytes) {
+  //   if (inputBytes.length !== 16) {
+  //     throw new Error('ECB block encrypt requires 16 bytes input.');
+  //   }
 
-    return Uint8Array.from(encrypted);
-  }
+  //   const cipher = crypto.createCipheriv('aes-128-ecb', this.keyBytes, null);
+  //   cipher.setAutoPadding(false);
+
+  //   const encrypted = Buffer.concat([
+  //     cipher.update(Buffer.from(inputBytes)),
+  //     cipher.final()
+  //   ]);
+
+  //   return Uint8Array.from(encrypted);
+  // }
 
   computeContinuousCounters(nonceBytes, totalLength) {
     const result = [];
@@ -156,12 +174,18 @@ export async function primusProofTest(attTemplateID) {
   const aesKey = JSON.parse(extendedData.CompleteHttpResponseCiphertext).packets[0].aes_key;
   console.log("aesKey=", aesKey);
 
+
+  //=======================nillion backend can do like follows=======================
+  // verify attestation
   const verifyResult = await primusZKTLS.verifyAttestation(attestation);
   console.log("verifyResult=", verifyResult);
 
   if (verifyResult === true) {
+    // check url
+    if (attestation.request.url === "https://www.binance.com/bapi/composite/v1/private/bigdata/finance/spot-statistics")
     {
-      const data = JSON.parse(extendedData.data)
+      // decode response
+      const data = JSON.parse(attestation.data)
       const parsed = JSON.parse(data.CompleteHttpResponseCiphertext)
       const tlsData = new TLSData(
         parsed.packets.map(packet => new HTTPPacket(
@@ -173,7 +197,9 @@ export async function primusProofTest(attTemplateID) {
         ))
       );
       const fullPlainResponse = await tlsData.getFullPlainResponse(aesKey);
-      console.log("fullPlainResponse=", fullPlainResponse);
+      console.log("binance pnl fullPlainResponse=", fullPlainResponse);
+    } else {
+      console.log("not support url");
     }
     //    const zkVmRequestData = {
     //     attestationData: {
