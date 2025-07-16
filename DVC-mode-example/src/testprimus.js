@@ -20,7 +20,6 @@ primusZKTLS.init(appId, appSecret).then(
 ////////////////////////////////////////
 //////////////////// Helpers Begin
 // ref: https://github.com/primus-labs/zktls-att-verification/tree/brevis/src
-import crypto from 'crypto';
 
 function incrNonce(nonceBuffer) {
   for (let i = 3; i >= 0; i--) {
@@ -182,7 +181,9 @@ export async function primusProofTest(attTemplateID) {
 
   if (verifyResult === true) {
     // check url
-    if (attestation.request.url === "https://www.binance.com/bapi/composite/v1/private/bigdata/finance/spot-statistics")
+    if (attestation.request.url.startsWith("https://www.binance.com/bapi/composite/v1/private/bigdata/finance/spot-statistics")
+      || attestation.request.url.startsWith("https://www.binance.com/bapi/capital/v1/private/streamer/trade/get-user-trades")
+      || attestation.request.url.startsWith("https://www.okx.com/priapi/v5/account/bills-archive"))
     {
       // decode response
       const data = JSON.parse(attestation.data)
@@ -197,7 +198,7 @@ export async function primusProofTest(attTemplateID) {
         ))
       );
       const fullPlainResponse = await tlsData.getFullPlainResponse(aesKey);
-      console.log("binance pnl fullPlainResponse=", fullPlainResponse);
+      console.log("fullPlainResponse=", fullPlainResponse);
     } else {
       console.log("not support url");
     }

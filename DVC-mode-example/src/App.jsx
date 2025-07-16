@@ -13,9 +13,19 @@ function App() {
     const [templateStates, setTemplateStates] = useState([]);
     const templates = [
         {
+            templateId: "c25c9f6a-b816-4a67-86ab-7292eff209a3",
+            name: "7-Day Spot Trade History",
+            source: "Binance",
+        },
+        {
             templateId: "369e1db8-47c9-4dc6-85b5-037cd02d3383",
             name: "30-day Spot Account PnL Rate",
             source: "Binance",
+        },
+        {
+            templateId: "de40b2ec-f26a-4dcd-a16d-869c55cbf400",
+            name: "7-Day Trade History",
+            source: "OKX",
         },
         {
             templateId: "4871f96f-10e1-43e1-93f3-2f7ef4d551db",
