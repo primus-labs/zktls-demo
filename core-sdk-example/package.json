@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/primus-labs/zktls-demo#readme",
   "dependencies": {
-    "@primuslabs/zktls-core-sdk": "^0.2.0"
+    "@primuslabs/zktls-core-sdk": "^0.2.1",
+    "tslib": "^2.8.1"
   }
 }
