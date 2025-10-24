@@ -1,4 +1,14 @@
-const { PrimusCoreTLS } = require("@primuslabs/zktls-core-sdk");
+import ccxt from "ccxt";
+import {PrimusCoreTLS} from "@primuslabs/zktls-core-sdk";
+import {configDotenv} from "dotenv";
+configDotenv()
+const apiKey = process.env.API_KEY;
+const secretKey = process.env.SECRET_KEY;
+// check apiKey and secretKey
+if (!apiKey || !secretKey) {
+    console.log("Please set API_KEY and SECRET_KEY in .env file.");
+    process.exit(1);
+}
 
 async function primusProofTest() {
     // Initialize parameters, the init function is recommended to be called when the program is initialized.
@@ -8,19 +18,24 @@ async function primusProofTest() {
     const initResult = await zkTLS.init(appId, appSecret);
     console.log("primusProof initResult=", initResult);
 
-    // Set request and responseResolves.
+    const exchange = new ccxt['binance']({
+        apiKey: apiKey,
+        secret: secretKey,
+    });
+    let signParams = { recvWindow: 60 * 1000 };
+    let res = exchange.sign('account', 'private', 'GET', signParams);
     const request ={
-        url: "https://www.okx.com/api/v5/public/instruments?instType=SPOT&instId=BTC-USD", // Request endpoint.
-        method: "GET", // Request method.
-        header: {}, // Request headers.
+        url: res.url, // Request endpoint.
+        method: res.method, // Request method.
+        header: res.headers, // Request headers.
         body: "" // Request body.
     };
     // The responseResolves is the response structure of the url.
     // For example the response of the url is: {"data":[{ ..."instFamily": "","instType":"SPOT",...}]}.
     const responseResolves = [
         {
-            keyName: 'instType', // According to the response keyname, such as: instType.
-            parsePath: '$.data[0].instType', // According to the response parsePath, such as: $.data[0].instType.
+            keyName: 'accountType:', // According to the response keyname, such as: instType.
+            parsePath: '$.accountType', // According to the response parsePath, such as: $.data[0].instType.
         }
     ];
     // Generate attestation request.
@@ -31,6 +46,7 @@ async function primusProofTest() {
         algorithmType: "proxytls"
     });
 
+    console.log("start attestation!")
     // Start attestation process.
     const attestation = await zkTLS.startAttestation(generateRequest);
     console.log("attestation=", attestation);
