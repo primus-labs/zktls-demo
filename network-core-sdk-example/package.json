@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@primuslabs/network-core-sdk": "^0.1.1",
+    "@primuslabs/network-core-sdk": "^0.1.2",
     "ethers": "^5.7.2"
   }
 }
