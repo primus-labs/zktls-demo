@@ -1,6 +1,6 @@
 const { PrimusNetwork } = require("@primuslabs/network-core-sdk");
 const { ethers } = require("ethers");
-
+require("dotenv/config");
 
 
 async function primusProofTest() {
