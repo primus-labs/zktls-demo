@@ -36,7 +36,7 @@ async function primusProofTest() {
         {
             keyName: 'balances', // According to the response keyname, such as: instType.
             parsePath: '$.balances', // According to the response parsePath, such as: $.data[0].instType.
-	    op: 'SHA256',
+	        op: 'SHA256',
         }
     ];
     // Generate attestation request.
