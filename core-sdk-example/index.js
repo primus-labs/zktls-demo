@@ -34,8 +34,9 @@ async function primusProofTest() {
     // For example the response of the url is: {"data":[{ ..."instFamily": "","instType":"SPOT",...}]}.
     const responseResolves = [
         {
-            keyName: 'accountType:', // According to the response keyname, such as: instType.
-            parsePath: '$.accountType', // According to the response parsePath, such as: $.data[0].instType.
+            keyName: 'balances', // According to the response keyname, such as: instType.
+            parsePath: '$.balances', // According to the response parsePath, such as: $.data[0].instType.
+	    op: 'SHA256',
         }
     ];
     // Generate attestation request.
