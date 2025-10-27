@@ -23,6 +23,7 @@ async function primusProofTest() {
         keyName: "instType",
         parseType: "json",
         parsePath: "$.data[0].instType",
+        op: "SHA256",
       },
     ],
   ];
