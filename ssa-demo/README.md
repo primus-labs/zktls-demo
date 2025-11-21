@@ -1,4 +1,4 @@
-# Twitch Subscription Demo
+# SAS Demo
 ## How to run 
 ### Install chrome extension
 Install the extension from the [Chrome extension store](https://chromewebstore.google.com/detail/primus-prev-pado/oeiomhmbaapihbilkfkhmlajkeegnjhe)  
