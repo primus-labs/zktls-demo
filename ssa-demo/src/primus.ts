@@ -12,6 +12,8 @@ const primusZKTLS = new PrimusZKTLS();
 const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
 const appSecret =
   "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
+// const attTemplateID = "d4d19cb5-8765-471b-b977-258b57120700";// test
+const attTemplateID = "0b8f6623-4b55-4b01-b094-ac21c80adbc9";
 if (!appId || !appSecret) {
   alert("appId or appSecret is not set.")
   throw new Error("appId or appSecret is not set.");
@@ -20,9 +22,9 @@ if (!appId || !appSecret) {
 const initAttestaionResult = await primusZKTLS.init(appId, appSecret);
 console.log("primusProof initAttestaionResult=", initAttestaionResult);
 
-export async function primusProofTest(callback: (attestation: string, verifyHashRes?: boolean) => void) {
+export async function primusProofTest(callback: (attestation: any, jsonResponse: any, verifyHashRes?: boolean) => void) {
   // Set TemplateID and user address.
-  const attTemplateID = "d4d19cb5-8765-471b-b977-258b57120700";
+  
   // ***You change address according to your needs.***
   const userAddress = "0x7ab44DE0156925fe0c24482a2cDe48C465e47573";
   // Generate attestation request.
@@ -56,13 +58,15 @@ export async function primusProofTest(callback: (attestation: string, verifyHash
     // Business logic checks, such as attestation content and timestamp checks
     // do your own business logic.
 
-    const verifyResponseHashFn = () => {
+    const verifyResponseHashFn: () => any = () => {
+      let formatJson = {}
+      let res = false
       const allJsonResponse: any = primusZKTLS.getAllJsonResponse(
         attestation.requestid
       );
       const formatResponseStr = allJsonResponse[0].content
       const formatResponseObj = JSON.parse(formatResponseStr)
-      const formatJson = jp.query(formatResponseObj, '$.earningsSummary.earnings')[0]
+      formatJson = jp.query(formatResponseObj, '$.earningsSummary.earnings')[0]
       const formatJsonStr = JSON.stringify(formatJson);
       console.log("allJsonResponse:", allJsonResponse, formatJson);
       let formatJsonHash = ethersUtils.sha256(ethersUtils.toUtf8Bytes(formatJsonStr));
@@ -72,11 +76,12 @@ export async function primusProofTest(callback: (attestation: string, verifyHash
       console.log('attestationDataHash', attestationDataHash)
       if (formatJsonHash === attestationDataHash) {
         console.log('Hash verification succeeded.')
-        return true
+        res = true
       }
+      return [formatJson, res]
     }
-    const verifyResponseHashRes = verifyResponseHashFn()
-    callback(attestation, verifyResponseHashRes);
+    const [formatJson, verifyResponseHashRes] = verifyResponseHashFn()
+    callback(attestation, formatJson, verifyResponseHashRes);
   } else {
     // If failed, define your own logic.
   }

@@ -1,8 +1,10 @@
+body {
+  background: #fff !important;
+}
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
 }
 
 /* Layout */
@@ -10,9 +12,8 @@
   max-width: 1600px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
-  padding: 2rem;
   text-align: center;
 }
 
@@ -65,22 +66,6 @@ label {
   color: #888;
 }
 
-/* Animations */
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -96,19 +81,9 @@ label {
   }
 }
 
-.my-json-container {
-  margin: 0 2rem;
-  width: 530px;
-  white-space: normal;
-  word-wrap: break-word;
-  text-align: left;
-  background: rgb(250, 250, 250);
-  padding: 15px;
-}
 .descItems {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  gap: 50px;
 }
 .descItem {
   display: flex;
@@ -119,4 +94,22 @@ label {
 }
 .failed {
   color: rgb(255, 96, 59);
+}
+
+/* 1. import Tailwind core directive */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2.  */
+body {
+  @apply font-sans bg-gray-50 text-gray-800; /* 用 @apply 复用 Tailwind 类 */
+  min-height: 100vh;
+}
+
+/* 3.  */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition;
+  }
 }
