@@ -75,6 +75,15 @@ function App() {
             container: "my-json-container",
           }}
         />
+        // <Card
+        //   title="Attestation Result"
+        //   className="mt-6 bg-gray-50"
+        //   size="small"
+        // >
+        //   <pre className="bg-white p-4 rounded-lg overflow-auto max-h-96 text-xs border border-gray-200">
+        //     {JSON.stringify(attestation, null, 2)}
+        //   </pre>
+        // </Card>
       )}
       {Object.keys(error).length > 0 && (
         <JsonView
