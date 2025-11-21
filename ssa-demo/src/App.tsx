@@ -124,7 +124,7 @@ function App() {
       )}
       {Object.keys(error).length > 0 && (
         <Card
-          title="Attestation Result"
+          title="Error"
           className=" mt-6 bg-gray-50"
           size="small"
         >
