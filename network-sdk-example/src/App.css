@@ -1,0 +1,116 @@
+body {
+  background: #fff !important;
+}
+#root {
+  max-width: 1280px;
+  width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Layout */
+.container {
+  max-width: 1600px;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  text-align: center;
+}
+
+.main-title {
+  margin-bottom: 1.5rem;
+  color: #333;
+}
+
+.card {
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 450px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.inputWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  /* flex-direction: column; */
+}
+label {
+  white-space: nowrap;
+}
+
+.card-title {
+  color: #555;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.search-line {
+  width: 100%;
+  max-width: 500px;
+}
+
+.start-button {
+  width: 100%;
+  max-width: 220px;
+  height: 45px;
+}
+
+/* Typography */
+.read-the-docs {
+  color: #888;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.descItems {
+  display: flex;
+  gap: 50px;
+}
+.descItem {
+  display: flex;
+  gap: 10px;
+}
+.value {
+  color: rgb(82, 196, 26);
+}
+.failed {
+  color: rgb(255, 96, 59);
+}
+
+/* 1. import Tailwind core directive */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2.  */
+body {
+  @apply font-sans bg-gray-50 text-gray-800; /* 用 @apply 复用 Tailwind 类 */
+  min-height: 100vh;
+}
+
+/* 3.  */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition;
+  }
+}
