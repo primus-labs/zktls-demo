@@ -4,17 +4,12 @@ import { ethers } from "ethers";
 
 const ethersUtils = ethers.utils;
 
-const attTemplateID = "29c33c39-b81d-43b9-8868-7977cf1fe209";
+const attTemplateID = "2e3160ae-8b1e-45e3-8c59-426366278b9d"; // x Account Ownership
 const templateMetaInfo = {
-  field: 'transactions',
-  jsonPath: '$'
+  field: 'screen_name',
+  jsonPath: '$.screen_name'
 }
-// test
-// const attTemplateID = "df2a20f0-221a-4dcc-9ae9-fcfc9b7ed2b6";
-// const templateMetaInfo = {
-//   field: 'code',
-//   jsonPath: '$'
-// }
+void templateMetaInfo; 
 
 //Initialization parameters
 const primusNetwork = new PrimusNetwork();
@@ -87,15 +82,15 @@ export async function main(onComplete: any, onStepChange: any) {
       ...submitTaskParams,
       ...submitTaskResult,
       // extendedParams: JSON.stringify({ attUrlOptimization: true }), //Optional,optimization the url of attestation.
-      allJsonResponseFlag: 'true',
-      attConditions: [
-        [
-          {
-            field: templateMetaInfo.field,
-            op: "SHA256",
-          },
-        ],
-      ]
+      // allJsonResponseFlag: 'true', // Optional,check () for details
+      // attConditions: [
+      //   [
+      //     {
+      //       field: templateMetaInfo.field,
+      //       op: "SHA256",
+      //     },
+      //   ],
+      // ]
     };
     const attestResult = await primusNetwork.attest(attestParams);
     const [attestationItem] = attestResult
@@ -112,13 +107,14 @@ export async function main(onComplete: any, onStepChange: any) {
     );
     console.log("Final result:", taskResult);
 
-    // get http response
-    const allJsonResponse: any = primusNetwork.getAllJsonResponse(attestParams.taskId);
-    console.log("allJsonResponse:", allJsonResponse);
-    debugger
-    const [formatJson, verifyResponseHashRes] = verifyResponseHashFn(allJsonResponse, templateMetaInfo.jsonPath, attestationItem) // optaional
+    //  optional get http response
+    // const allJsonResponse: any = primusNetwork.getAllJsonResponse(attestParams.taskId);
+    // console.log("allJsonResponse:", allJsonResponse);
+    // const [formatJson, verifyResponseHashRes] = verifyResponseHashFn(allJsonResponse, templateMetaInfo.jsonPath, attestationItem)
+    // onComplete(attestationItem, formatJson, verifyResponseHashRes);
+    onComplete(attestationItem);
     onStepChange(4)
-    onComplete(attestationItem, formatJson, verifyResponseHashRes);
+
   } catch (error) {
     console.error("Main flow error:", error);
   }
@@ -128,14 +124,14 @@ export async function main(onComplete: any, onStepChange: any) {
 
 
 const verifyResponseHashFn: (allJsonResponse: any, jsonPath: string, attestationItem: any) => any = (allJsonResponse, jsonPath, attestationItem) => {
-  let formatJson = {}
+  let formatJson: any = {}
   let res = false
   const formatResponseStr = allJsonResponse[0].content
-  const formatResponseObj = JSON.parse(formatResponseStr)
+  const formatResponseObj = isJsonString(formatResponseStr) ? JSON.parse(formatResponseStr) : formatResponseStr
   formatJson = jp.query(formatResponseObj, jsonPath)[0]
-  const formatJsonStr = JSON.stringify(formatJson);
-  // console.log('formatJsonStr', formatJsonStr)
-  // console.log("allJsonResponse:", allJsonResponse, formatJson);
+  const formatJsonStr = isJsonString(formatJson) ? JSON.stringify(formatJson) : formatJson;
+  console.log('formatJsonStr', formatJsonStr)
+  console.log("allJsonResponse:", allJsonResponse, formatJson);
   let formatJsonHash = ethersUtils.sha256(ethersUtils.toUtf8Bytes(formatJsonStr));
   formatJsonHash = formatJsonHash.startsWith('0x') ? formatJsonHash.slice(2) : formatJsonHash;
   console.log('formatJsonHash', formatJsonHash)
@@ -147,4 +143,22 @@ const verifyResponseHashFn: (allJsonResponse: any, jsonPath: string, attestation
     res = true
   }
   return [formatJson, res]
+}
+void verifyResponseHashFn; 
+
+/**
+ * Determine whether a string is a JSON string
+ * @param {string} str
+ * @returns {boolean} true=JSON string
+ */
+export function isJsonString(str: string) {
+  if (typeof str !== 'string' || str.trim() === '') {
+    return false;
+  }
+  try {
+    const parsed = JSON.parse(str);
+    return typeof parsed === 'object' && parsed !== null;
+  } catch (error) {
+    return false;
+  }
 }

@@ -4,7 +4,7 @@
 Install the extension from the [Chrome extension store](https://chromewebstore.google.com/detail/primus-prev-pado/oeiomhmbaapihbilkfkhmlajkeegnjhe)  
 Required Version: ≥ 0.3.44
 
-### Create an Template on the [Developer platform](https://dev.primuslabs.xyz/myDevelopment/myProjects)
+### Create an Template on the [Developer platform](https://dev.primuslabs.xyz/myDevelopment/myTemplates/new)
 1. Save your TemplateId
 2. Configure them by setting the values in [primus.ts](./src/primus.ts)
 

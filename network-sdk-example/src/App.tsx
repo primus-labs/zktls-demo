@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from "react";
-import { main } from "./primus";
+import { main, isJsonString } from "./primus";
 import { Button, Typography, Card, Descriptions, Steps } from "antd";
 import {
   LoadingOutlined,
@@ -16,25 +16,30 @@ function App() {
   const [attestation, setAttestation] = useState({});
   const [step, setStep] = useState(0);
 
-  const [jsonResponse, setJsonResponse] = useState({});
+  const [jsonResponse, setJsonResponse] = useState<any>({});
   const [hashVerification, setHashVerification] = useState(false);
   const [error, setError] = useState({});
   const items = useMemo(() => {
-    return [
-      {
-        label: "Attestation verification result",
-        children: <span className="text-green-600">Success</span>,
-      },
-      {
-        label: "Hash verification result",
-        children: hashVerification ? (
-          <span className="text-green-600">Success</span>
-        ) : (
-          <span className="	text-red-600">Failed</span>
-        ),
-      },
-    ];
-  }, [hashVerification]);
+    let item1 = {
+      label: "Attestation verification result",
+      children: <span className="text-green-600">Success</span>,
+    };
+    if (Object.values(jsonResponse).length > 0) {
+      return [
+        item1,
+        {
+          label: "Hash verification result",
+          children: hashVerification ? (
+            <span className="text-green-600">Success</span>
+          ) : (
+            <span className="	text-red-600">Failed</span>
+          ),
+        },
+      ];
+    } else {
+      return [item1];
+    }
+  }, [hashVerification, jsonResponse]);
 
   const startAttestation = async () => {
     if (doingAttestation) {
@@ -49,8 +54,12 @@ function App() {
       await main(
         (attestation: any, jsonResponse: any, flag: boolean) => {
           setAttestation(attestation);
-          setJsonResponse(jsonResponse);
-          setHashVerification(flag);
+          if (jsonResponse) {
+            setJsonResponse(jsonResponse);
+          }
+          if (flag) {
+            setHashVerification(flag);
+          }
         },
         (step: number) => {
           setStep(step);
@@ -157,7 +166,9 @@ function App() {
           size="small"
         >
           <pre className="bg-white p-4 rounded-lg overflow-auto max-h-96 text-xs border border-gray-200">
-            {JSON.stringify(jsonResponse, null, 2)}
+            {isJsonString(jsonResponse)
+              ? JSON.stringify(jsonResponse, null, 2)
+              : jsonResponse}
           </pre>
         </Card>
       )}
