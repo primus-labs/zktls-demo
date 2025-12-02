@@ -3,6 +3,7 @@ import jp from 'jsonpath';
 import { ethers } from "ethers";
 
 const ethersUtils = ethers.utils;
+
 const attTemplateID = "29c33c39-b81d-43b9-8868-7977cf1fe209";
 const templateMetaInfo = {
   field: 'transactions',
@@ -22,59 +23,51 @@ const CHAINID = 84532;
 // Use MetaMask provider and selected account
 let userAddress = "";
 let wallet;
-if (typeof window !== "undefined" && window.ethereum) {
-  const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
-  // Ensure account access
-  const accs = await web3Provider.send("eth_requestAccounts", []);
-  wallet = web3Provider.getSigner();
-  // wallet = window.ethereum;
-  userAddress = accs[0];
-  try {
-    await web3Provider.send("wallet_switchEthereumChain", [
-      { chainId: "0x" + CHAINID.toString(16) },
-    ]);
-  } catch (switchError: any) {
-    if (switchError.code === 4902) {
-      try {
-        await web3Provider.send("wallet_addEthereumChain", [
-          {
-            chainId: "0x" + CHAINID.toString(16),
-            chainName: "Base Sepolia",
-            rpcUrls: ["https://sepolia.base.org"],
-            nativeCurrency: {
-              name: "ETH",
-              symbol: "ETH",
-              decimals: 18,
+const connectWalletFn = async () => {
+  if (typeof window !== "undefined" && window.ethereum) {
+    const web3Provider = new ethers.providers.Web3Provider(window.ethereum);
+    // Ensure account access
+    const accs = await web3Provider.send("eth_requestAccounts", []);
+    wallet = web3Provider.getSigner();
+    // wallet = window.ethereum;
+    userAddress = accs[0];
+    try {
+      await web3Provider.send("wallet_switchEthereumChain", [
+        { chainId: "0x" + CHAINID.toString(16) },
+      ]);
+    } catch (switchError: any) {
+      if (switchError.code === 4902) {
+        try {
+          await web3Provider.send("wallet_addEthereumChain", [
+            {
+              chainId: "0x" + CHAINID.toString(16),
+              chainName: "Base Sepolia",
+              rpcUrls: ["https://sepolia.base.org"],
+              nativeCurrency: {
+                name: "ETH",
+                symbol: "ETH",
+                decimals: 18,
+              },
+              blockExplorerUrls: ["https://sepolia.basescan.org"],
             },
-            blockExplorerUrls: ["https://sepolia.basescan.org"],
-          },
-        ]);
-      } catch (addError) {
-        console.error("Failed to add chain", addError);
+          ]);
+        } catch (addError) {
+          console.error("Failed to add chain", addError);
+        }
+      } else {
+        console.error("Failed to switch chain", switchError);
       }
-    } else {
-      console.error("Failed to switch chain", switchError);
     }
+  } else {
+    throw new Error(
+      "MetaMask not detected. Please install and enable MetaMask in your browser"
+    );
   }
-} else {
-  throw new Error(
-    "MetaMask not detected. Please install and enable MetaMask in your browser"
-  );
 }
-
-// const PRIVATE_KEY = import.meta.env.VITE_PRIVATE_KEY;
-// console.log("PRIVATE_KEY=", PRIVATE_KEY);
-
-// const RPC_URL = "https://sepolia.base.org"; // rpc url
-let initWallet = wallet;
-// if (PRIVATE_KEY) {
-//   const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-//   initWallet = new ethers.Wallet(PRIVATE_KEY, provider);
-//   userAddress = initWallet.address;
-// }
+await connectWalletFn()
 
 // 1. Initialize
-const initRes = await primusNetwork.init(initWallet, CHAINID);
+const initRes = await primusNetwork.init(wallet, CHAINID);
 console.log("SDK initialized", initRes);
 
 export async function main(onComplete: any, onStepChange: any) {
@@ -119,36 +112,39 @@ export async function main(onComplete: any, onStepChange: any) {
     );
     console.log("Final result:", taskResult);
 
+    // get http response
     const allJsonResponse: any = primusNetwork.getAllJsonResponse(attestParams.taskId);
-    const verifyResponseHashFn: () => any = () => {
-      let formatJson = {}
-      let res = false
-      const formatResponseStr = allJsonResponse[0].content
-      const formatResponseObj = JSON.parse(formatResponseStr)
-      formatJson = jp.query(formatResponseObj, templateMetaInfo.jsonPath)[0]
-      const formatJsonStr = JSON.stringify(formatJson);
-      // console.log('formatJsonStr', formatJsonStr)
-      // console.log("allJsonResponse:", allJsonResponse, formatJson);
-      let formatJsonHash = ethersUtils.sha256(ethersUtils.toUtf8Bytes(formatJsonStr));
-      formatJsonHash = formatJsonHash.startsWith('0x') ? formatJsonHash.slice(2) : formatJsonHash;
-      console.log('formatJsonHash', formatJsonHash)
-      // const attestationDataHash = JSON.parse(attestationItem.attestation.data)[templateMetaInfo.field]
-      const attestationDataHash = Object.values(JSON.parse(attestationItem.attestation.data))[0]
-      console.log('attestationDataHash', attestationDataHash)
-      if (formatJsonHash === attestationDataHash) {
-        console.log('Hash verification succeeded.')
-        res = true
-      }
-      return [formatJson, res]
-    }
-    const [formatJson, verifyResponseHashRes] = verifyResponseHashFn()
+    console.log("allJsonResponse:", allJsonResponse);
+    debugger
+    const [formatJson, verifyResponseHashRes] = verifyResponseHashFn(allJsonResponse, templateMetaInfo.jsonPath, attestationItem) // optaional
     onStepChange(4)
     onComplete(attestationItem, formatJson, verifyResponseHashRes);
-
-    // Optional withdrawal
-    // const settledTaskIds = await primusNetwork.withdrawBalance();
-    // console.log('Withdrawn:', settledTaskIds  );
   } catch (error) {
     console.error("Main flow error:", error);
   }
+}
+
+
+
+
+const verifyResponseHashFn: (allJsonResponse: any, jsonPath: string, attestationItem: any) => any = (allJsonResponse, jsonPath, attestationItem) => {
+  let formatJson = {}
+  let res = false
+  const formatResponseStr = allJsonResponse[0].content
+  const formatResponseObj = JSON.parse(formatResponseStr)
+  formatJson = jp.query(formatResponseObj, jsonPath)[0]
+  const formatJsonStr = JSON.stringify(formatJson);
+  // console.log('formatJsonStr', formatJsonStr)
+  // console.log("allJsonResponse:", allJsonResponse, formatJson);
+  let formatJsonHash = ethersUtils.sha256(ethersUtils.toUtf8Bytes(formatJsonStr));
+  formatJsonHash = formatJsonHash.startsWith('0x') ? formatJsonHash.slice(2) : formatJsonHash;
+  console.log('formatJsonHash', formatJsonHash)
+  // const attestationDataHash = JSON.parse(attestationItem.attestation.data)[templateMetaInfo.field]
+  const attestationDataHash = Object.values(JSON.parse(attestationItem.attestation.data))[0]
+  console.log('attestationDataHash', attestationDataHash)
+  if (formatJsonHash === attestationDataHash) {
+    console.log('Hash verification succeeded.')
+    res = true
+  }
+  return [formatJson, res]
 }

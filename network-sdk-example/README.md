@@ -1,11 +1,11 @@
-# SAS Demo
+# Primus Network SDK Demo
 ## How to run 
 ### Install chrome extension
 Install the extension from the [Chrome extension store](https://chromewebstore.google.com/detail/primus-prev-pado/oeiomhmbaapihbilkfkhmlajkeegnjhe)  
-Required Version: ≥ 0.3.31
+Required Version: ≥ 0.3.44
 
-### Create an Application on the [Developer platform](https://dev.primuslabs.xyz/myDevelopment/myProjects)
-1. Save your appId and appSecret
+### Create an Template on the [Developer platform](https://dev.primuslabs.xyz/myDevelopment/myProjects)
+1. Save your TemplateId
 2. Configure them by setting the values in [primus.ts](./src/primus.ts)
 
 ### Install Dependencies

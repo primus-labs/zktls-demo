@@ -1,5 +1,5 @@
 {
-  "name": "twitch-subscription",
+  "name": "network-sdk-example",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,13 +12,11 @@
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
     "@primuslabs/network-js-sdk": "^0.1.8",
-    "@primuslabs/zktls-js-sdk": "^0.3.7",
     "antd": "^5.24.8",
     "jsonpath": "^1.1.1",
     "postcss": "^8.5.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-json-view-lite": "^2.4.1",
     "tailwindcss": "^3.4.18"
   },
   "devDependencies": {
