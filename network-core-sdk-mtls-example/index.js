@@ -45,16 +45,16 @@ async function primusProofTest() {
     console.log("Submit task result:", submitTaskResult);
 
     // Compose params for attest
-    // const mTLS = {
-    //   clientCrt: "YourClientCrtString", // Please replace with your ownner client crt string
-    //   clientKey: "YourClientKeyString", // Please replace with your ownner client key string
-    // }
+    const mTLS = {
+      clientCrt: "YourClientCrtString", // Please replace with your ownner client crt string
+      clientKey: "YourClientKeyString", // Please replace with your ownner client key string
+    }
     const attestParams = {
       ...submitTaskParams,
       ...submitTaskResult,
       requests,
       responseResolves,
-      // mTLS
+      mTLS
     };
     let attestResult = await primusNetwork.attest(attestParams);
     console.log("Attest result:", attestResult);
