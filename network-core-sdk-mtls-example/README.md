@@ -16,7 +16,12 @@ npm install
 ```
 
 ## Configure
-Create a `.env` file in the project root:
+Copy `.env.example` to `.env` in the project root:
+```bash
+cp .env.example .env
+```
+
+Then set your private key:
 ```
 PRIVATE_KEY=0xYOUR_PRIVATE_KEY
 ```
@@ -28,13 +33,14 @@ const mTLS = {
   clientKey: "YourClientKeyString",
 };
 ```
+Security note: keep the client key private and stored securely; never commit it or share it publicly.
 
 ## Customize
 Edit these sections in `index.js`:
 - `address`: your wallet address
-- `chainId` and `baseSepoliaRpcUrl`: switch to Base mainnet if needed
 - `requests`: request params for your mTLS endpoint
 - `responseResolves`: JSON parse paths for the response fields you want to attest
+- `chainId` and `baseSepoliaRpcUrl`: switch to Base mainnet if needed
 
 ## Notes
 - Keep your `.env` out of version control.
