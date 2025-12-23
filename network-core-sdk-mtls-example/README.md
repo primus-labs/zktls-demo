@@ -42,10 +42,6 @@ Edit these sections in `index.js`:
 - `responseResolves`: JSON parse paths for the response fields you want to attest
 - `chainId` and `baseSepoliaRpcUrl`: switch to Base mainnet if needed
 
-## Notes
-- Keep your `.env` out of version control.
-- The example uses a public RPC; for reliability, use your own provider endpoint.
-
 ## Run
 ```bash
 node index.js
@@ -55,3 +51,7 @@ You should see logs for:
 - submit task result
 - attest result
 - task result
+
+## Notes
+- Keep your `.env` out of version control.
+- The example uses a public RPC; for reliability, use your own provider endpoint.
