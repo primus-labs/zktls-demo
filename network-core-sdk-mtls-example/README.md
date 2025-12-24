@@ -21,19 +21,25 @@ Copy `.env.example` to `.env` in the project root:
 cp .env.example .env
 ```
 
-Then set your private key:
-```
+Then set your `PRIVATE_KEY`:
+```sh
 PRIVATE_KEY=0xYOUR_PRIVATE_KEY
 ```
 
-Optional: if you want to enable mTLS, uncomment the `mTLS` block in `index.js` and provide your client cert/key strings:
-```js
-const mTLS = {
-  clientCrt: "YourClientCrtString",
-  clientKey: "YourClientKeyString",
-};
+and
+
+`CLIENT_KEY` and `CLIENT_CRT` for mTLS:
+```sh
+CLIENT_KEY=/path/to/your/client/key
+CLIENT_CRT=/path/to/your/client/cert
 ```
-Security note: keep the client key private and stored securely; never commit it or share it publicly.
+
+* `CLIENT_KEY`: the client private key file, in PEM format (e.g. `-----BEGIN PRIVATE KEY-----...`).
+* `CLIENT_CRT`: the client certificate file, in PEM format (e.g. `-----BEGIN CERTIFICATE-----...`).
+
+<br/>
+
+**Security note**: keep the client key private and stored securely; never commit it or share it publicly.
 
 ## Customize
 Edit these sections in `index.js`:
