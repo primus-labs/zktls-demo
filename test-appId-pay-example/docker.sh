@@ -4,7 +4,7 @@
 
 set -e
 
-IMAGE_NAME="primuslabs/test-appid-pay-example"
+IMAGE_NAME="primuslabs/test-appid-pay-example:latest"
 CONTAINER_NAME="test-appid-pay-example"
 PORT=8080
 

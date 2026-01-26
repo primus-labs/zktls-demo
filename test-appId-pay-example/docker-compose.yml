@@ -3,9 +3,7 @@ version: '3.8'
 services:
   # Production build with nginx
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: primuslabs/test-appid-pay-example:latest
     ports:
       - "38108:80"
     container_name: test-appid-pay-example
