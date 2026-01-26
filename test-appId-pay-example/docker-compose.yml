@@ -7,6 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "38107:80"
     container_name: test-appid-pay-example
     restart: unless-stopped
