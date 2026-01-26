@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  # Production build with nginx
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    container_name: test-appid-pay-example
+    restart: unless-stopped
