@@ -15,10 +15,15 @@ function App() {
     }
     setIsLoading(true)
     try {
-      await primusProofTest(appId, appSecret, attTemplateID)
+      const attestation = await primusProofTest(appId, appSecret, attTemplateID)
+      console.log('Attestation:', attestation)
     } catch (error) {
       console.error('Attestation error:', error)
-      alert('Attestation process failed, please check the console')
+      if (error?.code) {
+        alert(`${error?.code}: ${error?.message}`)
+
+      } else {alert('Attestation process failed, please check the console')}
+      
     } finally {
       setIsLoading(false)
     }

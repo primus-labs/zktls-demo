@@ -1,4 +1,6 @@
-import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
+// import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
+import { PrimusZKTLS } from "@superorange/zka-js-sdk"
+
 
 export async function primusProofTest(appId, appSecret, attTemplateID) {
     // Initialize parameters.
