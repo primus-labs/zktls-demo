@@ -2,7 +2,10 @@ import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
 
 // Initialize parameters.
 const primusZKTLS = new PrimusZKTLS();
-const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
+const appId = "YOUR_APPID";
+const userAddress = "YOUR_USER_ADDRESS"; // 0x...
+const attTemplateID = "2e3160ae-8b1e-45e3-8c59-426366278b9d";
+
 // const initAttestaionResult = await primusZKTLS.init(appId);
 // If it is running on a mobile terminal, you need to pass the platform parameter. The default platform is PC. If you add the following configuration, it can run on both PC and mobile terminals.
 let platformDevice = "pc";
@@ -15,9 +18,6 @@ const initAttestaionResult = await primusZKTLS.init(appId, "", {platform: platfo
 console.log("primusProof initAttestaionResult=", initAttestaionResult);
 
 export async function primusProof() {
-    // Set TemplateID and user address.
-    const attTemplateID = "2e3160ae-8b1e-45e3-8c59-426366278b9d";
-    const userAddress = "0x7ab44DE0156925fe0c24482a2cDe48C465e47573";
     // Generate attestation request
     const request = primusZKTLS.generateRequestParams(attTemplateID, userAddress);
     
