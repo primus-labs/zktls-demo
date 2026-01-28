@@ -1,5 +1,4 @@
-// import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
-import { PrimusZKTLS } from "@superorange/zka-js-sdk"
+import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
 
 
 export async function primusProofTest(appId, appSecret, attTemplateID) {
@@ -17,7 +16,7 @@ export async function primusProofTest(appId, appSecret, attTemplateID) {
     console.log("primusProof initAttestaionResult=", initAttestaionResult);
 
     // Set TemplateID and user address.
-    const userAddress = "0x7ab44DE0156925fe0c24482a2cDe48C465e47573";
+    const userAddress = ""; // YOUR_USER_ADDRESS
     // Generate attestation request.
     const request = primusZKTLS.generateRequestParams(attTemplateID, userAddress);
 

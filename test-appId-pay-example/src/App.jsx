@@ -3,9 +3,9 @@ import './App.css'
 import { primusProofTest } from './testprimus'
 
 function App() {
-  const [appId, setAppId] = useState("0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8")
-  const [appSecret, setAppSecret] = useState("0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5")
-  const [attTemplateID, setAttTemplateID] = useState("2dbbc11e-afc2-4a3e-a120-9eb2a456e027")
+  const [appId, setAppId] = useState("")
+  const [appSecret, setAppSecret] = useState("")
+  const [attTemplateID, setAttTemplateID] = useState("2e3160ae-8b1e-45e3-8c59-426366278b9d")
   const [isLoading, setIsLoading] = useState(false)
 
   const handleStartAttestation = async () => {
