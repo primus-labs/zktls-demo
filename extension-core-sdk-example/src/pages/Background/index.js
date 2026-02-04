@@ -19,6 +19,10 @@ async function primusProofTest() {
     // Initialize parameters, the init function is recommended to be called when the program is initialized.
     const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
     const appSecret= "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
+    // test error code :-1002003
+    // const appId = "0xf8fcf17da5822c7dd821815504d4ff3a05f9203b";
+    // const appSecret = "0x977e8c99c04ec40d762b73abbb27443b4d441f3b1991ff3c6e1a83d7a8858de3"
+    
     const initResult = await zkTLS.init(appId, appSecret);
 
     // For Production Example, init only need appId.
@@ -42,6 +46,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log('background onMessage message', message);
     const { type, method} = message;
     if (type === "PrimusExtCoreTLS" && method === "startAttestation") {
+        // example 1: single requestUrl
         // Set request and responseResolves.
         const request ={
             url: "https://www.okx.com/api/v5/public/instruments?instType=SPOT&instId=BTC-USD", // Request endpoint.
@@ -55,8 +60,50 @@ chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
             {
                 keyName: 'instType', // According to the response keyname, such as: instType.
                 parsePath: '$.data[0].instType', // According to the response parsePath, such as: $.data[0].instType.
+                // op:'SHA256'
             }
         ];
+
+        // example 2: batch requestUrl
+
+        // let request = [
+        //     {
+        //         url: "https://www.okx.com/api/v5/public/instruments?instType=SPOT&instId=BTC-USD",
+        //         method: "GET",
+        //         header: {},
+        //         body: "",
+        //     },
+        //     {
+        //         url: "https://www.okx.com/api/v5/public/time",
+        //         method: "GET",
+        //         header: {},
+        //         body: "",
+        //     }
+        // ];
+
+        // const responseResolves = [
+        //     [
+        //         {
+        //             keyName: "instIdCode",
+        //             parseType: "json",
+        //             parsePath: "$.data[0].instIdCode",
+        //             // op: '>',
+        //             // value: 0,
+        //             // op: 'SHA256_EX',
+        //         }
+        //     ],
+        //     [
+        //         {
+        //             keyName: "ts",
+        //             parseType: "json",
+        //             parsePath: "$.code",
+        //             // op: 'STREQ',
+        //             // value: '0',
+        //             // op: 'SHA256_EX',
+        //         }
+        //     ]
+        // ];
+
         // Generate attestation request.
         const generateRequest = zkTLS.generateRequestParams(request, responseResolves);
         // Set zkTLS mode, default is proxy model. (This is optional)

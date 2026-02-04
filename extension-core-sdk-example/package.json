@@ -13,7 +13,8 @@
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
   },
   "dependencies": {
-    "@primuslabs/zktls-ext-core-sdk": "^0.2.0",
+    "@primuslabs/zktls-ext-core-sdk": "^0.2.1",
+    "@superorange/zktls-ext-core-sdk": "^0.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
