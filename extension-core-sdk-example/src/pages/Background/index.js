@@ -23,7 +23,7 @@ async function primusProofTest() {
     // const appId = "0xf8fcf17da5822c7dd821815504d4ff3a05f9203b";
     // const appSecret = "0x977e8c99c04ec40d762b73abbb27443b4d441f3b1991ff3c6e1a83d7a8858de3"
     
-    const initResult = await zkTLS.init(appId, appSecret);
+    const initResult = await zkTLS.init(appId, appSecret, "debug");
 
     // For Production Example, init only need appId.
     //const initResult = await zkTLS.init(appId);
