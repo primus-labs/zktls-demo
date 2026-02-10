@@ -1521,10 +1521,10 @@
     schema-utils "^3.0.0"
     source-map "^0.7.3"
 
-"@primuslabs/zktls-ext-core-sdk@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.npmjs.org/@primuslabs/zktls-ext-core-sdk/-/zktls-ext-core-sdk-0.2.2.tgz"
-  integrity sha512-wsoiryRuK50YJUuiaiBQ3mkxhcXiU3Q7D8v0di8O4cPmiLYe0NPBtRrngpbKujFrU+m0oYuYcKFlckDRfB+h1A==
+"@primuslabs/zktls-ext-core-sdk@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.npmjs.org/@primuslabs/zktls-ext-core-sdk/-/zktls-ext-core-sdk-0.2.4.tgz"
+  integrity sha512-wVH7Kay0WxgkFy+RPMVXTh4+BtSdtQcvbRraeiNmyJnFlgH6ZVyF/NfPT026tw9VGaMZZ6ZKmKgq3h5QJCZIew==
   dependencies:
     ethers "^5.7.2"
     uuid "^11.0.4"
