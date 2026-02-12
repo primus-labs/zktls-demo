@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@primuslabs/zktls-reactnative-core-sdk": "^0.1.0",
+    "@primuslabs/zktls-reactnative-core-sdk": "^0.2.0",
     "react": "19.0.0",
     "react-native": "0.79.2"
   },
