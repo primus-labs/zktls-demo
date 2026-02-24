@@ -21,8 +21,8 @@ function App() {
     try {
       // Initialize parameters, the init function is recommended to be called when the page is initialized.
       const primusZKTLS = new PrimusZKTLS();
-      const appId = "0xa821cfa0f513cb6e5391ea119b4f758037c8264d";
-      const appSecret = "0xdbc800897bc646f8dd674cc652a1c89c3572323b51d43e6feed7703b1275c381"; // Just for testing, appSecret cannot be written in the front-end code
+      const appId = "YOUR_APPID";
+      const appSecret = "YOUR_APPSECRET"; // Just for testing, appSecret cannot be written in the front-end code
 
       console.log("dddddd");
       const initAttestaionResult = await primusZKTLS.init(appId, appSecret);

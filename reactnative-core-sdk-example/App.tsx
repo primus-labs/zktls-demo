@@ -10,11 +10,8 @@ export default function App() {
   useEffect(() => {
     async function init() {
       // production
-      const appId = "0xe319e567f70e2b2a153cb6ceaa73893648cde180";
-      const appSecret = "0x4348563b2178adc171d851bcc27054d7879e07a41263ccfaa3b00d63d056559a";
-      // test
-      // const appId = "0x899dd126268e3010beaa1ac141a2a0aa98deba09";
-      // const appSecret = "0x7da5d1cd2fdd494aa1176031151a6202734e30ddb14fd01dc3376616408ee0a7";
+      const appId = "YOUR_APPID";
+      const appSecret = "YOUR_APPSECRET";
       try {
 
         // Initialize parameters, the init function is recommended to be called when the program is initialized.

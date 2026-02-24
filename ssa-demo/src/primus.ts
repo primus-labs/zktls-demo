@@ -9,9 +9,9 @@ const ethersUtils = ethers.utils;
 const primusZKTLS = new PrimusZKTLS();
 
 //**** Set appId and appSecret here!!!
-const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
+const appId = "YOUR_APPID";
 const appSecret =
-  "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
+  "YOUR_APPSECRET";
 // const attTemplateID = "d4d19cb5-8765-471b-b977-258b57120700";// test
 const attTemplateID = "0b8f6623-4b55-4b01-b094-ac21c80adbc9";
 if (!appId || !appSecret) {

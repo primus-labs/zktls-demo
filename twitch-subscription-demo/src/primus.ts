@@ -6,9 +6,9 @@ import { ethers } from "ethers";
 const primusZKTLS = new PrimusZKTLS();
 
 //**** Set appId and appSecret here!!!
-const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
+const appId = "YOUR_APPID";
 const appSecret =
-  "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
+  "YOUR_APPSECRET";
 if(!appId || !appSecret){
     alert("appId or appSecret is not set.")
     throw new Error("appId or appSecret is not set.");

@@ -5,8 +5,8 @@ globalThis.Buffer = Buffer;
 
 //Initialization parameters
 const primusZKTLS = new PrimusZKTLS();
-const appId = "0x17ae11d76b72792478d7b7bcdc76da9574ab3cf8";
-const appSecret = "0xafa01caf44f07d2b21bc5e2bde1de2a8ba56f33ac2e223169f99634f57d049b5";
+const appId = "YOUR_APPID";
+const appSecret = "YOUR_APPSECRET";
 
 primusZKTLS.init(appId, appSecret).then(
   (result) => {
