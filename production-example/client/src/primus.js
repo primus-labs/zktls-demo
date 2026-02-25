@@ -2,7 +2,7 @@ import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
 
 // Initialize parameters.
 const primusZKTLS = new PrimusZKTLS();
-const appId = "YOUR_APPID";
+const appId = import.meta.env.VITE_APP_ID;
 const userAddress = "YOUR_USER_ADDRESS"; // 0x...
 const attTemplateID = "2e3160ae-8b1e-45e3-8c59-426366278b9d";
 

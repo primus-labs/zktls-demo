@@ -15,12 +15,14 @@ node index.js
 
 ### Configuration
 
-Before running the server, you need to configure the following parameters in `server/index.js`:
+Before running the server, you need to configure the following parameters:
 
 #### App ID and App Secret
-The **App ID** and **App Secret** in `server/index.js` (lines 13-14) can be obtained from:
+The **App ID** and **App Secret** can be obtained from:
 - [Primus Developer Hub - My Projects](https://dev.primuslabs.xyz/myDevelopment/myProjects)
 - Create a new project or use an existing one to get your App ID and App Secret
+
+Copy `.env.example` to `.env` in the `server` directory and set `APP_ID` and `APP_SECRET` to your values. The `.env` file is listed in `.gitignore` and will not be committed—do not commit it to the repository.
 
 ## Client
 
@@ -36,12 +38,14 @@ npm run dev
 
 ### Configuration
 
-Before running the client, you need to configure the following parameters in `client/src/primus.js`:
+Before running the client, you need to configure the following parameters:
 
 #### App ID
-The **App ID** in `client/src/primus.js` (line 5) can be obtained from:
+The **App ID** can be obtained from:
 - [Primus Developer Hub - My Projects](https://dev.primuslabs.xyz/myDevelopment/myProjects)
 - Create a new project or use an existing one to get your App ID
+
+Copy `.env.example` to `.env` in the `client` directory and set `VITE_APP_ID` to your value. The `.env` file is listed in `.gitignore` and will not be committed—do not commit it to the repository.
 
 #### Attestation Template ID
 The **Attestation Template ID** (`attTemplateID`) in `client/src/primus.js` (line 7) can be obtained from:
@@ -50,4 +54,4 @@ The **Attestation Template ID** (`attTemplateID`) in `client/src/primus.js` (lin
 
 ## Important Notes
 
-⚠️ **Note**: The **App ID** in `server/index.js` and `client/src/primus.js` must be the same. Make sure both files use the same App ID value.
+⚠️ **Note**: The **App ID** used by the server (in `server/.env`) and the client (in `client/.env` as `VITE_APP_ID`) must be the same. Make sure both `.env` files use the same App ID value.

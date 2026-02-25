@@ -1,10 +1,14 @@
 import {PrimusCoreTLS} from "@primuslabs/zktls-core-sdk";
+import 'dotenv/config';
 
 
 async function primusProofTest() {
     // Initialize parameters, the init function is recommended to be called when the program is initialized.
-    const appId = "YOUR_APPID";
-    const appSecret= "YOUR_APPSECRET";
+    const appId = process.env.APP_ID;
+    const appSecret = process.env.APP_SECRET;
+    if (!appId || !appSecret) {
+        throw new Error('Missing APP_ID or APP_SECRET. Copy .env.example to .env and set your credentials.');
+    }
     const zkTLS = new PrimusCoreTLS();
     const initResult = await zkTLS.init(appId, appSecret);
     console.log("primusProof initResult=", initResult);

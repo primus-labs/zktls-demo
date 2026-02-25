@@ -8,10 +8,9 @@ const ethersUtils = ethers.utils;
 // Initialize parameters.
 const primusZKTLS = new PrimusZKTLS();
 
-//**** Set appId and appSecret here!!!
-const appId = "YOUR_APPID";
-const appSecret =
-  "YOUR_APPSECRET";
+//**** App ID and App Secret are read from .env (see README Configuration)
+const appId = import.meta.env.VITE_APP_ID;
+const appSecret = import.meta.env.VITE_APP_SECRET;
 // const attTemplateID = "d4d19cb5-8765-471b-b977-258b57120700";// test
 const attTemplateID = "0b8f6623-4b55-4b01-b094-ac21c80adbc9";
 if (!appId || !appSecret) {

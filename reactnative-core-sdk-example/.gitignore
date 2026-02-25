@@ -77,3 +77,9 @@ yarn-error.log
 yarn.lock
 **/Gemfile.lock
 **/Podfile.lock
+
+
+# Environment variables (contains app credentials, do not commit)
+.env
+.env.local
+.env.*.local

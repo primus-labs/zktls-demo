@@ -2,8 +2,8 @@ import { PrimusZKTLS } from "@primuslabs/zktls-js-sdk"
 
 // Initialize parameters.
 const primusZKTLS = new PrimusZKTLS();
-const appId = "YOUR_APPID";
-const appSecret= "YOUR_APPSECRET";
+const appId = import.meta.env.VITE_APP_ID;
+const appSecret = import.meta.env.VITE_APP_SECRET;
 const userAddress = "YOUR_USER_ADDRESS"; // 0x...
 const attTemplateID = "2e3160ae-8b1e-45e3-8c59-426366278b9d";
 //const initAttestaionResult = await primusZKTLS.init(appId, appSecret);

@@ -7,7 +7,7 @@ This demo shows how to create zkTLS data attestations (proofs) about your 30-day
 git clone the repo into your local folder, then:
 
 ```node
-cd proof-of-cex
+cd cex-example
 
 npm run dev
 ```
@@ -51,3 +51,14 @@ for init the SDK and get the zkTLS attestation, you can refer to this [example](
 
 # More Templates
 You can get more templates from the dev hub [marketplace](https://dev.primuslabs.xyz/marketplace)
+
+# Configuration
+
+Before starting the attestation, you need to configure the following parameters:
+
+### App ID and App Secret
+The **App ID** and **App Secret** can be obtained from:
+- [Primus Developer Hub - My Projects](https://dev.primuslabs.xyz/myDevelopment/myProjects)
+- Create a new project or use an existing one to get your App ID and App Secret
+
+Copy `.env.example` to `.env` in this directory and set `VITE_APP_ID` and `VITE_APP_SECRET` to your values. The `.env` file is listed in `.gitignore` and will not be committed—do not commit it to the repository.

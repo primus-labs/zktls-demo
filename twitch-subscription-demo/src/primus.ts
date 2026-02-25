@@ -5,13 +5,11 @@ import { ethers } from "ethers";
 // Initialize parameters.
 const primusZKTLS = new PrimusZKTLS();
 
-//**** Set appId and appSecret here!!!
-const appId = "YOUR_APPID";
-const appSecret =
-  "YOUR_APPSECRET";
-if(!appId || !appSecret){
-    alert("appId or appSecret is not set.")
-    throw new Error("appId or appSecret is not set.");
+const appId = import.meta.env.VITE_APP_ID;
+const appSecret = import.meta.env.VITE_APP_SECRET;
+if (!appId || !appSecret) {
+  alert("Missing VITE_APP_ID or VITE_APP_SECRET. Copy .env.example to .env and set your credentials.");
+  throw new Error("Missing VITE_APP_ID or VITE_APP_SECRET. Copy .env.example to .env and set your credentials.");
 }
 
 const initAttestaionResult = await primusZKTLS.init(appId, appSecret);

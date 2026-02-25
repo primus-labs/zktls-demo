@@ -10,8 +10,12 @@ export default function App() {
   useEffect(() => {
     async function init() {
       // production
-      const appId = "YOUR_APPID";
-      const appSecret = "YOUR_APPSECRET";
+      const appId = process.env.APP_ID ?? '';
+      const appSecret = process.env.APP_SECRET ?? '';
+      if (!appId || !appSecret) {
+        setInitResult('Error: APP_ID and APP_SECRET must be set in .env');
+        return;
+      }
       try {
 
         // Initialize parameters, the init function is recommended to be called when the program is initialized.

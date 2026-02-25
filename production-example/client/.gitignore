@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables (contains app credentials, do not commit)
+.env
+.env.local
+.env.*.local

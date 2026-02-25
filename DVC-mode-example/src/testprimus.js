@@ -5,8 +5,11 @@ globalThis.Buffer = Buffer;
 
 //Initialization parameters
 const primusZKTLS = new PrimusZKTLS();
-const appId = "YOUR_APPID";
-const appSecret = "YOUR_APPSECRET";
+const appId = import.meta.env.VITE_APP_ID;
+const appSecret = import.meta.env.VITE_APP_SECRET;
+if (!appId || !appSecret) {
+  throw new Error('Missing VITE_APP_ID or VITE_APP_SECRET. Copy .env.example to .env and set your credentials.');
+}
 
 primusZKTLS.init(appId, appSecret).then(
   (result) => {

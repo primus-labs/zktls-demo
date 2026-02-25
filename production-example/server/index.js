@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const { PrimusZKTLS } = require('@primuslabs/zktls-js-sdk');
@@ -10,8 +11,8 @@ app.use(cors());
 
 // Listen to the client's signature request and sign the attestation request.
 app.get('/primus/sign', async (req, res) => {
-  const appId = "YOUR_APPID";
-  const appSecret= "YOUR_APPSECRET";
+  const appId = process.env.APP_ID;
+  const appSecret = process.env.APP_SECRET;
 
   // Create a PrimusZKTLS object.
   const primusZKTLS = new PrimusZKTLS();
