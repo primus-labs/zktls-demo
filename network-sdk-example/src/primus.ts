@@ -91,6 +91,15 @@ export async function main(onComplete: any, onStepChange: any) {
       //     },
       //   ],
       // ]
+      // attConditions: [
+      //   [
+      //     {
+      //       field: templateMetaInfo.field,
+      //       op: "STREQ", // STRNEQ
+      //       value: "Amy"
+      //     },
+      //   ],
+      // ]
     };
     const attestResult = await primusNetwork.attest(attestParams);
     const [attestationItem] = attestResult
