@@ -1,5 +1,7 @@
 # zktls-demo test
 
+> ⚠️ **For local testing only.** This example signs the attestation request directly in the browser, which requires putting the App Secret into frontend environment variables (`VITE_APP_SECRET`). A secret bundled into client-side code can be extracted by anyone. For any user-facing deployment, use the [production example](../production-example), where the App Secret stays on the backend and the client requests signatures from a server endpoint. See the [Test vs Production comparison](../README.md#test-example-vs-production-example) in the root README.
+
 ## Run
 The main code file is this: https://github.com/primus-labs/zktls-demo/blob/main/test-example/src/testprimus.js
 

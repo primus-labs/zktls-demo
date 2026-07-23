@@ -1,4 +1,7 @@
 # zktls-demo production
+
+This example demonstrates the recommended production architecture: the **App Secret stays on the server**, and the client only holds the App ID. The client builds the attestation request, sends it to the server's `/primus/sign` endpoint for signing, and then runs the attestation with the signed request. Compare with the [test example](../test-example), which signs in the browser and is intended for local testing only. See the [Test vs Production comparison](../README.md#test-example-vs-production-example) in the root README.
+
 The Primus zkTLS demo consists of two parts: server and client. You can run it with the following command.
 
 ## Server
