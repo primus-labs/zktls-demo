@@ -229,9 +229,11 @@ function logPublicValues(details) {
         for (const b of arr.slice(off, off + 32)) v = (v << 8n) | BigInt(b);
         return v;
     };
-    const inner = Number(bnum(blob, 0));
-    const totalCents = bnum(blob, inner);
-    const assetCount = bnum(blob, inner + 32);
+    // dataBlob is abi tuple(uint256, uint256) -- TWO PLAIN WORDS. It has no dynamic members,
+    // so there is NO leading offset word: read words 0 and 1 directly. Treating word0 as an
+    // offset indexes out of range and silently yields 0/0.
+    const totalCents = bnum(blob, 0);
+    const assetCount = bnum(blob, 32);
 
     console.log("[zkVM] --- proven public values ---");
     console.log("[zkVM]   providerId       =", hex(t + 32));
