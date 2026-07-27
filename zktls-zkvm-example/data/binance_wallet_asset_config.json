@@ -1,0 +1,13 @@
+{
+  "attestor_addr": "0xdb736b13e2f522dbe18b2015d0291e4b193d8ef6",
+  "url": [
+    "https://www.binance.com/bapi/asset/v2/private/asset-service/wallet/asset?needAlphaAsset=true&needEuFuture=true"
+  ],
+  "conditions": [
+    {
+      "op": "REVEAL_SALTTED_HASH",
+      "field": "{\"type\":\"FIELD_ARITHMETIC\",\"op\":\"SHA256_WITH_SALT\",\"field\":\"$\"}",
+      "reveal_id": "data"
+    }
+  ]
+}

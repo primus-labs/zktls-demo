@@ -5,7 +5,8 @@ const primusZKTLS = new PrimusZKTLS();
 const appId = import.meta.env.VITE_APP_ID;
 const appSecret = import.meta.env.VITE_APP_SECRET;
 const userAddress = "0x810b7bacEfD5ba495bB688bbFD2501C904036AB7"; // 0x...
-const attTemplateID = "67ed246d-ff00-47d5-9026-5ff09cbdd65b";
+const attTemplateID = "88c4e005-9e53-4e97-ab56-1c3490f505fa";
+
 //const initAttestaionResult = await primusZKTLS.init(appId, appSecret);
 
 // ---------------------------------------------------------------------------
@@ -13,11 +14,13 @@ const attTemplateID = "67ed246d-ff00-47d5-9026-5ff09cbdd65b";
 // ---------------------------------------------------------------------------
 const ZK_ID_BASE_URL = "https://zk-id.brevis.network/v1";
 
-// Route under test: Binance avg_balance. The guest parses the WHOLE attested response
-// in-circuit (no pre-extracted reveal fields).
+// Route under test: Binance wallet_balance (raw whole-response reveal). The attestation
+// reveals the ENTIRE HTTP body via the root selector, bound to the signature by
+// sha256(content||salt). The guest re-hashes and parses $.data[] in-circuit - no AES
+// decryption, so private_data carries {id, salt, content} instead of an aes_key.
 // NOTE: placeholder identityPropertyId - replace when the canonical id is assigned.
 const IDENTITY_PROPERTY_ID =
-    "0xa55e7ba1a55e7ba1a55e7ba1a55e7ba1a55e7ba1a55e7ba1a55e7ba1a55e7ba1";
+    "0xb0117a11ce570b0117a11ce570b0117a11ce570b0117a11ce570b0117a11ce57";
 const APP_ID = "0x36013dd48b0c1fbfe8906c0af0ce521dda69186ab6e6b5017dbf9691f9cf8e5c";
 
 // The user is identified by a Kaito account id. There is NO wallet in this flow.
@@ -37,15 +40,17 @@ export async function primusProofTest() {
     // Generate attestation request.
     const request = primusZKTLS.generateRequestParams(attTemplateID, userAddress);
 
-    // Complete-response mode: the attestor puts the AES-CTR ciphertext of the ENTIRE HTTP
-    // response inside the SIGNED public_data.data (CompleteHttpResponseCiphertext), and hands
-    // the AES key back out-of-band. This is what lets the zkVM guest decrypt and parse the raw
-    // website data in-circuit.
-    //
-    // Do NOT use allJsonResponse for this: it carries the same JSON but sits OUTSIDE the signed
-    // preimage, so it is not attested and must never be fed to the zkVM.
-    request.setComputeMode("nonecomplete");
+    const attConditions = [
+     [
+      {
+        field:'data',
+        op:'SHA256_WITH_SALT',
+      },
+     ],
+    ];
+    request.setAttConditions(attConditions);
 
+    request.setAllJsonResponseFlag('true');
     // Transfer request object to string.
     const requestStr = request.toJsonString();
 
@@ -61,22 +66,55 @@ export async function primusProofTest() {
     console.log("verifyResult=", verifyResult);
 
     if (verifyResult === true) {
-        // AES key for the complete-response ciphertext (out-of-band, not part of the signature).
-        const extendedData = JSON.parse(primusZKTLS.getExtendedData(request.requestid));
-        const aesKey = JSON.parse(extendedData.CompleteHttpResponseCiphertext).packets[0].aes_key;
-        console.log("aesKey=", aesKey);
+        // public_data = the signed attestation (logged above).
+        //
+        // private_data = the plaintext behind the salted-hash reveal. It comes back split
+        // across two SDK getters, matched by reveal id:
+        //   getAllJsonResponse -> [{ id, content }]  (the whole HTTP body)
+        //   getPrivateData     -> [{ id, salt }]     (the per-field salt)
+        // The zkVM re-computes sha256(content||salt) and checks it equals the signed
+        // public_data.data hash, so both halves are required and must line up by id.
+        const plainRes = primusZKTLS.getAllJsonResponse(request.requestid);
+        console.log("plainRes=", plainRes);
+
+        const privateRes = primusZKTLS.getPrivateData(request.requestid);
+        console.log("privateRes=", privateRes);
+
+        const privateData = buildPrivateData(plainRes, privateRes);
+        console.log("privateData=", privateData);
 
         // ---- zkVM: prove over the attested raw response ----
-        await proveWithZkVm(attestation, aesKey);
+        await proveWithZkVm(attestation, privateData);
     } else {
         // If failed, define your own logic.
     }
 }
 
 /**
+ * Merge the SDK's two private-data halves into the shape the zkVM expects:
+ *   [{ id, salt, content: [<whole body>] }]
+ * salt comes from getPrivateData, content from getAllJsonResponse, matched by reveal id.
+ */
+function buildPrivateData(plainRes, privateRes) {
+    const saltFor = (id) => {
+        if (Array.isArray(privateRes)) {
+            const hit = privateRes.find((p) => p && p.id === id);
+            return hit && (hit[id] ?? hit.salt);
+        }
+        // getPrivateData returns an object keyed by reveal id: { "<id>": "<salt hex>" }
+        return privateRes && privateRes[id];
+    };
+    return (plainRes || []).map(({ id, content }) => ({
+        id,
+        salt: saltFor(id),
+        content: Array.isArray(content) ? content : [content],
+    }));
+}
+
+/**
  * Submit the attestation to the Brevis ZK Credit gateway and poll until the zkVM proof is ready.
  */
-async function proveWithZkVm(attestation, aesKey) {
+async function proveWithZkVm(attestation, privateData) {
     console.log("%c[zkVM] 1/4 building proof request", "color:#0a7");
 
     const body = {
@@ -84,9 +122,10 @@ async function proveWithZkVm(attestation, aesKey) {
         identityPropertyId: IDENTITY_PROPERTY_ID,
         zkTlsProof: {
             public_data: attestation,
-            // IMPORTANT: private_data must be an ARRAY. The zkVM deserializes it as a sequence;
-            // an object ({ aes_key }) fails with "invalid type: map, expected a sequence".
-            private_data: [{ aes_key: aesKey }],
+            // private_data must be a SEQUENCE: [{ id, salt, content: [...] }]. The zkVM
+            // deserializes it as an array; a bare object fails with
+            // "invalid type: map, expected a sequence".
+            private_data: privateData,
         },
         businessParams: { kaito_id: KAITO_ID },
     };
@@ -184,15 +223,15 @@ function logPublicValues(details) {
     const blobLen = Number(num(blobOff));
     const blob = raw.slice(blobOff + 32, blobOff + 32 + blobLen);
 
-    // dataBlob is abi tuple(uint256 averageBalanceUsdtCents, uint256 sampleCount)
+    // dataBlob is abi tuple(uint256 totalValuationUsdtCents, uint256 assetCount)
     const bnum = (arr, off) => {
         let v = 0n;
         for (const b of arr.slice(off, off + 32)) v = (v << 8n) | BigInt(b);
         return v;
     };
     const inner = Number(bnum(blob, 0));
-    const avgCents = bnum(blob, inner);
-    const sampleCount = bnum(blob, inner + 32);
+    const totalCents = bnum(blob, inner);
+    const assetCount = bnum(blob, inner + 32);
 
     console.log("[zkVM] --- proven public values ---");
     console.log("[zkVM]   providerId       =", hex(t + 32));
@@ -200,8 +239,8 @@ function logPublicValues(details) {
     console.log("[zkVM]   identityProperty =", hex(t + 96));
     console.log("[zkVM]   timestamp        =", num(t + 128).toString());
     console.log("[zkVM]   kaitoId          =", text(kaitoOff + 32, kaitoLen));
-    console.log("[zkVM]   averageBalance   =", (Number(avgCents) / 100).toFixed(2), "USDT",
-                `(${avgCents} cents)`);
-    console.log("[zkVM]   sampleCount      =", sampleCount.toString(),
-                "daily entries parsed in-circuit");
+    console.log("[zkVM]   totalBalance     =", (Number(totalCents) / 100).toFixed(2), "USDT",
+                `(${totalCents} cents)`);
+    console.log("[zkVM]   assetCount       =", assetCount.toString(),
+                "assets summed in-circuit");
 }

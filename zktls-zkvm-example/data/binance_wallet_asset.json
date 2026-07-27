@@ -1,0 +1,41 @@
+{
+  "public_data": {
+    "recipient": "0x810b7bacEfD5ba495bB688bbFD2501C904036AB7",
+    "request": {
+      "url": "https://www.binance.com/bapi/asset/v2/private/asset-service/wallet/asset?needAlphaAsset=true&needEuFuture=true",
+      "header": "",
+      "method": "GET",
+      "body": ""
+    },
+    "reponseResolve": [
+      {
+        "keyName": "data",
+        "parseType": "",
+        "parsePath": "{\"type\":\"FIELD_ARITHMETIC\",\"op\":\"SHA256_WITH_SALT\",\"field\":\"$\"}"
+      }
+    ],
+    "data": "{\"data\":\"eb01ff282c7d592c888806ef24dc87af7858c792995d9c47b9770afba6a828bb\"}",
+    "attConditions": "[{\"op\":\"REVEAL_SALTTED_HASH\",\"field\":\"{\\\"type\\\":\\\"FIELD_ARITHMETIC\\\",\\\"op\\\":\\\"SHA256_WITH_SALT\\\",\\\"field\\\":\\\"$\\\"}\",\"reveal_id\":\"data\"}]",
+    "timestamp": 1785143248201,
+    "additionParams": "{\"algorithmType\":\"proxytls\"}",
+    "attestors": [
+      {
+        "attestorAddr": "0xdb736b13e2f522dbe18b2015d0291e4b193d8ef6",
+        "url": "https://primuslabs.xyz"
+      }
+    ],
+    "signatures": [
+      "0x04621c77242c0460f13d27946e15d0b14268b85eb95ac1bc546507f66924998532c2e693b164aedb137dfcd9f28a4fd40d424afd590218272a693c5f103438481b"
+    ],
+    "requestid": "2d6f6123-8eaa-4d65-ab9b-83db03a1dae2"
+  },
+  "private_data": [
+    {
+      "id": "data",
+      "salt": "684b21a142f4d14a23342867932aafa8",
+      "content": [
+        "{\"code\":\"000000\",\"message\":null,\"messageDetail\":null,\"data\":[{\"asset\":\"ETH\",\"assetName\":\"Ethereum\",\"amount\":\"0.56287665\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20201110/3a8c9fe6-2a76-4ace-aa07-415d994de6f0.png\",\"valuationAmount\":\"1103.21571893\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"USDT\",\"assetName\":\"TetherUS\",\"amount\":\"4.37929589\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20240508/6180cdb6-8480-4a3c-a8a9-8a193a89fc5e.png\",\"valuationAmount\":\"4.37929589\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"USDC\",\"assetName\":\"USDC\",\"amount\":\"0.99669237\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20201110/4cf7d633-92fb-4d37-80ed-458c7d1ea410.png\",\"valuationAmount\":\"0.99753955\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"BNB\",\"assetName\":\"BNB\",\"amount\":\"0.00030768\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20220218/94863af2-c980-42cf-a139-7b9f462a36c2.png\",\"valuationAmount\":\"0.1760668\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"POL\",\"assetName\":\"Polygon Ecosystem Token\",\"amount\":\"1.98901844\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20240909/bb09660d-a1cb-496e-8a9b-92db30904156.png\",\"valuationAmount\":\"0.15506387\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"0G\",\"assetName\":\"0G\",\"amount\":\"0.38\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20250921/137e9686-843c-469b-a8ba-df3b5fb6e968.png\",\"valuationAmount\":\"0.06574\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"SOL\",\"assetName\":\"Solana\",\"amount\":\"0.000292\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20230404/b2f0c70f-4fb2-4472-9fe7-480ad1592421.png\",\"valuationAmount\":\"0.02224748\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"AR\",\"assetName\":\"Arweave\",\"amount\":\"0.00374\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20250205/75fa6e90-cf43-4b6e-8aa7-4e29088602ae.png\",\"valuationAmount\":\"0.00698632\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"SCR\",\"assetName\":\"Scroll\",\"amount\":\"0.0985\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20241009/76c847ec-bb01-4e67-ae19-674caf3dc799.png\",\"valuationAmount\":\"0.0020222\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null},{\"asset\":\"XPL\",\"assetName\":\"Plasma\",\"amount\":\"0.015215\",\"logoUrl\":\"https://bin.bnbstatic.com/image/admin_mgs_image_upload/20250924/4432fa9b-6c36-44c5-9a0c-3b54cc96e2cf.png\",\"valuationAmount\":\"0.00128901\",\"profit\":null,\"profitRatio\":null,\"avgCost\":null,\"avgBuyCost\":null,\"isCexAsset\":true,\"coinBusinessType\":\"CRYPTO\",\"chainId\":null,\"contractAddress\":null}],\"success\":true}"
+      ]
+    }
+  ]
+}
