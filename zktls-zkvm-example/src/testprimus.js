@@ -5,7 +5,7 @@ const primusZKTLS = new PrimusZKTLS();
 const appId = import.meta.env.VITE_APP_ID;
 const appSecret = import.meta.env.VITE_APP_SECRET;
 const userAddress = "0x810b7bacEfD5ba495bB688bbFD2501C904036AB7"; // 0x...
-const attTemplateID = "2e3160ae-8b1e-45e3-8c59-426366278b9d";
+const attTemplateID = "88c4e005-9e53-4e97-ab56-1c3490f505fa";
 //const initAttestaionResult = await primusZKTLS.init(appId, appSecret);
 
 // If it is running on a mobile terminal, you need to pass the platform parameter. The default platform is PC. If you add the following configuration, it can run on both PC and mobile terminals.
@@ -25,6 +25,19 @@ export async function primusProofTest() {
     // request.setAttMode({
     //     algorithmType: "proxytls"
     // });
+
+    const attConditions = [
+     [
+      {
+        field:'data',
+        op:'SHA256_WITH_SALT',
+      },
+     ],
+    ];
+    request.setAttConditions(attConditions);
+
+    request.setAllJsonResponseFlag('true');
+
     
     // Transfer request object to string.
     const requestStr = request.toJsonString();
@@ -43,6 +56,11 @@ export async function primusProofTest() {
     if (verifyResult === true) {
         // Business logic checks, such as attestation content and timestamp checks
         // do your own business logic.
+        const plainRes = primusZKTLS.getAllJsonResponse(request.requestid);
+        console.log("plainRes=", plainRes);
+
+        const privateRes = primusZKTLS.getPrivateData(request.requestid);
+        console.log("privateRes=", privateRes);
     } else {
         // If failed, define your own logic.
     }
