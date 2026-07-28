@@ -1,5 +1,16 @@
 //! Single-file Pico zkVM guest: **Binance total wallet balance from a zkTLS attestation.**
 //!
+//! # REFERENCE ONLY -- does not build in this repo
+//!
+//! Production lives in brevis-zkcredit at
+//! `vm/app/src/providers/binance/wallet_balance_v1/mod.rs` (route
+//! `binance.wallet_balance.v1`), where input parsing, request binding and public-values encoding
+//! come from `stable::` rather than being reimplemented.
+//!
+//! Kept purely to show the shape of a self-contained guest. Its test module covers only the
+//! fixture-free logic; verifying a real attestation needs a production-signed capture, which this
+//! repo deliberately does not ship.
+//!
 //! Self-contained reference implementation of the Brevis ZK Credit "Kaito" flow. Proves:
 //!
 //!   > The holder of `kaito_id` controls a Binance account whose wallet portfolio was worth
@@ -40,8 +51,10 @@
 //! hex        = "0.4"
 //! ```
 
-#![no_main]
+// `no_main` only outside `cargo test`, otherwise the test harness has no entry point.
+#![cfg_attr(not(test), no_main)]
 
+#[cfg(not(test))]
 pico_sdk::entrypoint!(main);
 
 use anyhow::{anyhow, bail, Result};
@@ -268,7 +281,7 @@ fn verified_reveal(messages: &[JsonData], id: &str) -> Result<String> {
 /// Response shape:
 /// ```json
 /// { "code": "000000", "success": true,
-///   "data": [ { "asset": "ETH", "amount": "0.56287665", "valuationAmount": "1103.21571893" }, … ] }
+///   "data": [ { "asset": "TKN", "amount": "0.10000000", "valuationAmount": "250.98765432" }, … ] }
 /// ```
 ///
 /// `valuationAmount` is a decimal STRING, denominated in USDT. Summed as integer cents so the
@@ -301,7 +314,7 @@ fn total_wallet_balance(raw: &str) -> Result<WalletBalance> {
     })
 }
 
-/// Parse a decimal amount (`"1103.21571893"`, `"4.38"`, `"1300"`) into integer cents.
+/// Parse a decimal amount (`"250.98765432"`, `"4.38"`, `"1300"`) into integer cents.
 /// Extra fractional precision is truncated. Fails closed on anything non-numeric.
 fn parse_amount_to_cents(input: &str) -> Result<u64> {
     let bytes = input.as_bytes();
@@ -494,12 +507,10 @@ fn parse_hex_32(s: &str) -> Result<[u8; 32]> {
 mod tests {
     use super::*;
 
-    /// Real production-signed wallet-asset attestation.
-    const ATTESTATION: &str = include_str!("../test-vectors/inputs/binance_wallet_asset.json");
-
-    fn attested_body() -> String {
-        verify_attestation(ATTESTATION.as_bytes()).unwrap().raw_response
-    }
+    // Only fixture-free tests live here. Verifying a real attestation needs a production-signed
+    // capture, which this repo deliberately does not ship (the signature covers the account data,
+    // so such a file cannot be de-identified). Those tests -- including the aes_key forgery
+    // regressions -- live with the production route in brevis-zkcredit, where the fixture exists.
 
     #[test]
     fn config_fingerprint_matches() {
@@ -507,41 +518,6 @@ mod tests {
             keccak256(ATTESTATION_CONFIG.as_bytes()),
             ATTESTATION_CONFIG_KECCAK256
         );
-    }
-
-    #[test]
-    fn sums_real_portfolio() {
-        let b = total_wallet_balance(&attested_body()).unwrap();
-        // ETH 1103.21571893 + USDT 4.37929589 + … = 1109.02197005 exact.
-        // Per-asset truncation gives 1108.97; three dust rows contribute 0 but still count.
-        assert_eq!(b.asset_count, 10);
-        assert_eq!(b.total_usdt_cents, 110897);
-    }
-
-    /// The bypass this guest is written to defeat: genuine signature, forged body, appended
-    /// `aes_key`. Reading `private_data` directly would accept it; reading `messages` rejects it.
-    #[test]
-    fn rejects_forged_content_with_appended_aes_key() {
-        let mut v: Value = serde_json::from_str(ATTESTATION).unwrap();
-        let entry = &mut v["private_data"][0];
-        entry["content"] = serde_json::json!([
-            r#"{"code":"000000","success":true,"data":[{"asset":"USDT","valuationAmount":"1000000.00"}]}"#
-        ]);
-        entry["aes_key"] = serde_json::json!("00000000000000000000000000000000");
-
-        let forged = serde_json::to_vec(&v).unwrap();
-        assert!(
-            verify_attestation(&forged).is_err(),
-            "forged body with appended aes_key MUST be rejected"
-        );
-    }
-
-    #[test]
-    fn rejects_forged_content_without_aes_key() {
-        let mut v: Value = serde_json::from_str(ATTESTATION).unwrap();
-        v["private_data"][0]["content"] = serde_json::json!([r#"{"data":[]}"#]);
-        let forged = serde_json::to_vec(&v).unwrap();
-        assert!(verify_attestation(&forged).is_err(), "salted-hash check must fail");
     }
 
     #[test]
@@ -557,7 +533,7 @@ mod tests {
 
     #[test]
     fn amounts_truncate_not_round() {
-        assert_eq!(parse_amount_to_cents("1103.21571893").unwrap(), 110321);
+        assert_eq!(parse_amount_to_cents("250.98765432").unwrap(), 25098);
         assert_eq!(parse_amount_to_cents("0.00698632").unwrap(), 0);
         assert_eq!(parse_amount_to_cents("1300").unwrap(), 130000);
         assert!(parse_amount_to_cents("1.2.3").is_err());
@@ -567,9 +543,9 @@ mod tests {
 
     #[test]
     fn data_blob_is_two_plain_words() {
-        let blob = abi_encode_two_words(110897, 10);
+        let blob = abi_encode_two_words(25098, 10);
         assert_eq!(blob.len(), 64);
-        assert_eq!(u64::from_be_bytes(blob[24..32].try_into().unwrap()), 110897);
+        assert_eq!(u64::from_be_bytes(blob[24..32].try_into().unwrap()), 25098);
         assert_eq!(u64::from_be_bytes(blob[56..64].try_into().unwrap()), 10);
     }
 }
