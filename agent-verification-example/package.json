@@ -1,0 +1,26 @@
+{
+  "name": "agent-verification-example",
+  "version": "1.0.0",
+  "description": "Primus zkTLS agent-side verification example: freshness, schema, and replay checks after verifyAttestation",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node agentGuard.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/primus-labs/zktls-demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/primus-labs/zktls-demo/issues"
+  },
+  "homepage": "https://github.com/primus-labs/zktls-demo#readme",
+  "dependencies": {
+    "@primuslabs/zktls-core-sdk": "^0.2.6",
+    "dotenv": "^17.2.3",
+    "tslib": "^2.8.1"
+  }
+}
